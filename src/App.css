@@ -14,14 +14,14 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  /* color: white; */
 }
 
 .App-link {
@@ -35,4 +35,30 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.Athlete {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75em;
+  text-align: left;
+}
+
+.Athlete img {
+  border-radius: 50%;
+  height: 3em;
+}
+
+.AthleteInfo {
+  padding-left: 0.5em;
+  display: inline-block;
+  /* vertical-align: middle; */
+  /* margin-top: -1em; */
+  top: -0.5em;
+  position: relative;
+}
+
+.Athlete .AthleteLocation {
+  font-size: 0.75em;
 }
