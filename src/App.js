@@ -5,6 +5,7 @@ import oAuthService from './services/oauth'
 import stravaService from './services/strava'
 
 import Athlete from './components/Athlete'
+import ActivityDisplay from './components/ActivityDisplay'
 
 
 
@@ -12,9 +13,14 @@ import Athlete from './components/Athlete'
 
 
 
+
+
 function App() {
 
   const [athlete, setAthlete] = useState(null)
+  const [activities, setActivities] = useState([])
+  const [loaded, setLoaded] = useState(false)
+  const [metric, setMetric] = useState(true)
 
   var queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -33,10 +39,13 @@ function App() {
     console.log(result)
     console.log(new Date().getTime() > result.expires_at * 1000  ? 'expired' : 'valid')
     setAthlete(result.athlete)
+    console.log('athlete:', athlete)
     stravaService.allActivities({
-      access_token : result.access_token
+      access_token : result.access_token,
+      activities : activities , setActivities : setActivities
     }).then(res => {
       console.log(res)
+      setLoaded(true)
     })
 
   })
@@ -47,19 +56,31 @@ function App() {
         {athlete!==null &&
           <Athlete athlete={athlete} />
         }
-
-        {athlete===null &&
-          <div>
-            <img src="jl-icon.png" alt="logo" /> <br />
-            <a href="http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri=http://localhost:3001/approval&approval_prompt=auto&scope=read_all,activity:read_all">
-            <img src="connect-orange.png" alt="Strava authorize button" />
-            </a>
-          </div>
-        }
-
-
-
+        <button className="MetricButton" onClick={()=>setMetric(!metric)}>{metric?'🇫🇷':'🇬🇧'}</button>
       </header>
+
+      {athlete===null &&
+        <div className="Unconnected">
+          <img src="jl-icon.png" alt="logo" /> <br />
+          <a href="http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri=http://localhost:3001/approval&approval_prompt=auto&scope=read_all,activity:read_all">
+          <img src="connect-orange.png" alt="Strava authorize button" />
+          </a>
+        </div>
+      }
+
+      {athlete!==null && !loaded &&
+        <div>
+          Loaded {activities.length} activities...
+        </div>
+      }
+
+      {athlete!==null && loaded &&
+        <div>
+          Loaded {activities.length} activities 👍
+          <ActivityDisplay activities={activities} metric={metric} />
+        </div>
+      }
+
     </div>
   );
 }

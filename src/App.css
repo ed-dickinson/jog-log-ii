@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
@@ -13,52 +13,87 @@
   }
 }
 
-.App-header {
+/* .App-header {
   background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+} */
+
+.Unconnected {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  /* color: white; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 .Athlete {
-  position: fixed;
-  top: 10px;
+  /* position: fixed; */
+  top: 0.25em;
   left: 10px;
-  font-size: 0.75em;
+  font-size: 1em;
   text-align: left;
 }
 
 .Athlete img {
   border-radius: 50%;
   height: 3em;
+  border: 2px solid white;
 }
 
 .AthleteInfo {
   padding-left: 0.5em;
+  padding: 0 0.25em 0.1em;
   display: inline-block;
   /* vertical-align: middle; */
   /* margin-top: -1em; */
   top: -0.5em;
   position: relative;
+  background-color: white;
+  border-radius: 5px;
 }
 
 .Athlete .AthleteLocation {
   font-size: 0.75em;
+}
+
+.MetricButton {
+  font-size: 1.5em;
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  height: 1em;
+  position: absolute;
+  right: 0.5em;
+  top: 0.5em;
+}
+
+.ActivityControls button {
+  /* background-color: #fc5200; */
+  background-color: white;
+  /* border: 2px solid #fc5200; */
+  border-color: #bf3e00;
+  border-radius: 50%;
+  height: 2em;
+  width: 2em;
+  cursor: pointer;
+}
+
+.ActivityControls button.Selected {
+  background-color: #c94100;
+  border-color: #bf3e00;
+}
+
+table em {
+  color: white;
 }

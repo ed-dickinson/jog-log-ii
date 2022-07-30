@@ -46,6 +46,8 @@ const exported = {
       data = [...data, ...response.data]
       i += 1
 
+      params.setActivities(data)
+
       if (response.data.length === 0) {
         break
       }
