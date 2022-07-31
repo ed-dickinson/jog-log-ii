@@ -1,3 +1,7 @@
+:root {
+  --strava: #fc5200;
+}
+
 .App {
   /* text-align: center; */
 }
@@ -38,9 +42,9 @@
 
 
 .Athlete {
-  /* position: fixed; */
+  position: relative;
   top: 0.25em;
-  left: 10px;
+  left: 0.25em;
   font-size: 1em;
   text-align: left;
 }
@@ -48,7 +52,7 @@
 .Athlete img {
   border-radius: 50%;
   height: 3em;
-  border: 2px solid white;
+  border: 2px solid var(--strava);
 }
 
 .AthleteInfo {
@@ -64,7 +68,9 @@
 }
 
 .Athlete .AthleteLocation {
-  font-size: 0.75em;
+  font-size: 0.675em;
+  color: #fc5200;
+  font-weight: 600;
 }
 
 .MetricButton {
@@ -78,22 +84,108 @@
   top: 0.5em;
 }
 
-.ActivityControls button {
-  /* background-color: #fc5200; */
+.LoadingInfo {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  top: 20px;
+  transition: top 1s;
   background-color: white;
-  /* border: 2px solid #fc5200; */
-  border-color: #bf3e00;
-  border-radius: 50%;
-  height: 2em;
-  width: 2em;
-  cursor: pointer;
 }
 
-.ActivityControls button.Selected {
-  background-color: #c94100;
-  border-color: #bf3e00;
+.LoadingInfo.NoneLoaded {
+  top: 45vh;
+}
+
+.LoadingBar {
+  height: 1.6em;
+  width: 1.6em;
+  border: 2px solid #fc5200;
+  border-radius: 50%;
+  border-width: 2px;
+  /* border-color: white white #fc5200 #fc5200; */
+  display: inline-block;
+  animation: loading 1s infinite linear;
+  animation-timing-function: step-end;
+  transform: rotate(45deg);
+  position: relative;
+  top: -0.125em;
+}
+
+.LoadingBar.Loading {
+  text-align: center;
+  vertical-align: middle;
+}
+.LoadingBar.Loaded {
+  transform: rotate(0deg);
+  animation: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.LoadingBar span {
+  position: relative;
+  top: 0.25em;
+  vertical-align: middle;
+}
+.LoadingBar.Loading span {
+  transform: rotate(-45deg);
+  display: block;
+  position: relative;
+}
+
+@keyframes loading {
+  0% {border-color: white white white white;}
+  12.5% {border-color: #fc5200 white white white;}
+  25% {border-color: #fc5200 #fc5200 white white;}
+  32.5% {border-color: #fc5200 #fc5200 #fc5200 white;}
+  50% {border-color: #fc5200 #fc5200 #fc5200 #fc5200;}
+  62.5% {border-color: white #fc5200 #fc5200 #fc5200;}
+  75% {border-color: white white #fc5200 #fc5200;}
+  87.5% {border-color: white white white #fc5200;}
+  100% {border-color: white white white white;}
+}
+
+.ActivityControls button {
+  background-color: white;
+  cursor: pointer;
+  height: 2em;
+  /* border-color: #bf3e00; */
+  border-color: #fc5200;
+}
+
+.ActivityControls .FilterButton {
+  /* background-color: #fc5200; */
+  /* border: 2px solid #fc5200; */
+  border-radius: 50%;
+  width: 2em;
+  margin-right: 0.25em;
+}
+
+.ActivityControls .FilterButton.Selected {
+  /* background-color: #c94100; */
+  /* border-color: #bf3e00; */
+  background-color: #fc5200;
+}
+
+.ActivityControls .DisplayStyleButton {
+  font-weight: 600;
+  border-radius: 1em;
+  margin-right: 0.25em;
+  color: #fc5200;
+}
+.ActivityControls .DisplayStyleButton.Selected {
+  background-color: #fc5200;
+  /* border-color: #bf3e00; */
+  border-color: #fc5200;
+  color: white;
 }
 
 table em {
   color: white;
+}
+
+.DisplayListTable th button {
+  border: 0;
+  cursor: pointer;
 }

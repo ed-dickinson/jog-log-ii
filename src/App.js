@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import './App.css';
 import oAuthService from './services/oauth'
 import stravaService from './services/strava'
@@ -22,33 +22,45 @@ function App() {
   const [loaded, setLoaded] = useState(false)
   const [metric, setMetric] = useState(true)
 
+  const [scope, setScope] = useState(null)
+
   var queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+  // const scope = urlParams.get('scope')
+  if (urlParams.get('scope') === 'read,activity:read_all,read_all' && scope === null) {
+    console.log(scope)
+    setScope('read,activity:read_all,read_all')
+  }
   var temp_token = urlParams.get('code');
   // console.log(temp_token)
 
   // console.log(process.env.REACT_APP_CLIENT_SECRET, temp_token)
   // const response = await
   // const response =
-  oAuthService.exchange({
-    client_id : '70098',
-    client_secret : process.env.REACT_APP_CLIENT_SECRET,
-    code : temp_token,
-    grant_type : 'authorization_code'
-  }).then(result => {
-    console.log(result)
-    console.log(new Date().getTime() > result.expires_at * 1000  ? 'expired' : 'valid')
-    setAthlete(result.athlete)
-    console.log('athlete:', athlete)
-    stravaService.allActivities({
-      access_token : result.access_token,
-      activities : activities , setActivities : setActivities
-    }).then(res => {
-      console.log(res)
-      setLoaded(true)
-    })
 
-  })
+  useEffect(()=>{
+    oAuthService.exchange({
+      client_id : '70098',
+      client_secret : process.env.REACT_APP_CLIENT_SECRET,
+      code : temp_token,
+      grant_type : 'authorization_code'
+    }).then(result => {
+      console.log(result)
+      console.log(new Date().getTime() > result.expires_at * 1000  ? 'expired' : 'valid')
+      setAthlete(result.athlete)
+      console.log('athlete:', athlete)
+      stravaService.allActivities({
+        access_token : result.access_token,
+        activities : activities , setActivities : setActivities
+      }).then(res => {
+        console.log(res)
+        setLoaded(true)
+      })
+    })
+  }, [scope])
+
+
+
 
   return (
     <div className="App">
@@ -68,16 +80,16 @@ function App() {
         </div>
       }
 
-      {athlete!==null && !loaded &&
-        <div>
-          Loaded {activities.length} activities...
-        </div>
-      }
+      
 
-      {athlete!==null && loaded &&
+      {athlete!==null &&
         <div>
-          Loaded {activities.length} activities 👍
-          <ActivityDisplay activities={activities} metric={metric} />
+          <div className={"LoadingInfo"+(activities.length===0?' NoneLoaded':'')}>
+            Loaded {activities.length} activities{loaded?'  ':'... '}
+            <div className={"LoadingBar "+(loaded?"Loaded":'Loading')}><span>{loaded?"👍":"🤞"}</span></div>
+          </div>
+
+          <ActivityDisplay activities={activities} setActivities={setActivities} metric={metric} />
         </div>
       }
 

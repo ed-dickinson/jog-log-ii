@@ -1,5 +1,9 @@
-import React, {useState}  from 'react'
+import React, {useState, useEffect}  from 'react'
 import timeFormatter from '../formatters/timeFormatter'
+
+import DisplayList from './DisplayList'
+import DisplayYear from './DisplayYear'
+
 
 /*
   activity has:
@@ -16,54 +20,76 @@ import timeFormatter from '../formatters/timeFormatter'
   total_elevation_gain , elev_high & elev_low
 */
 
-const IsolateActivityButton = ({badge, activity, isolatedActivity, setIsolatedActivity, isolatedActivities, setIsolatedActivities}) => {
+const FilterActivityButton = ({badge, activity, filteredActivity, setFilteredActivity, filteredActivities, setFilteredActivities}) => {
   return (
-    <button className={isolatedActivity===activity?'Selected':'Unselected'} onClick={()=>setIsolatedActivity(activity)}>{badge}</button>
+    <button className={'FilterButton '+(filteredActivity===activity?'Selected':'Unselected')} onClick={()=>setFilteredActivity(activity)}>{badge}</button>
   )
 }
 
-const ActivityDisplay = ({activities, metric}) => {
+const DisplayStyleButton = ({style, display, setDisplay}) => {
+  return (
+    <button className={'DisplayStyleButton '+(display===style?'Selected':'Unselected')} onClick={()=>setDisplay(style)}>{style}</button>
+  )
+}
 
-  const [isolatedActivity, setIsolatedActivity] = useState('None')
-  const [isolatedActivities, setIsolatedActivities] = useState(activities)
+const ActivityDisplay = ({activities, setActivities, metric}) => {
+
+  const [filteredActivity, setFilteredActivity] = useState('None')
+  const [filteredActivities, setFilteredActivities] = useState(activities)
+
+  const [display, setDisplay] = useState('List')
+
+  const filterActivities = (filteredActivity) => {
+    if (filteredActivity === 'None') {
+      setFilteredActivities(activities)
+      return
+    } else {
+      let temp_activities = []
+
+      activities.forEach(activity => {
+        if (activity.type === filteredActivity) {
+          temp_activities.push(activity)
+        }
+      })
+
+      console.log(temp_activities)
+
+      setFilteredActivities(temp_activities)
+    }
+
+  }
+
+  // console.log(display)
+
+  useEffect(() => {
+    console.log('filter by', filteredActivity)
+    filterActivities(filteredActivity)
+
+  }, [filteredActivity])
 
   // let temp_activities = []
   // activities.forEach(activity => {
-  //   if (activity.type === isolatedActivity || isolatedActivity === 'None') {
+  //   if (activity.type === filteredActivity || filteredActivity === 'None') {
   //     temp_activities.push(activity)
   //   }
   // })
-  // setIsolatedActivities(temp_activities)
+  // setFilteredActivities(temp_activities)
 
   return (
     <div className="Activites">
       <div className="ActivityControls">
-        <IsolateActivityButton badge={'🏃'} activity={'Run'} isolatedActivity={isolatedActivity} setIsolatedActivity={setIsolatedActivity}
-        isolatedActivities={isolatedActivities} setIsolatedActivities={setIsolatedActivities} />
-        <IsolateActivityButton badge={'🚴'} activity={'Ride'} isolatedActivity={isolatedActivity} setIsolatedActivity={setIsolatedActivity} isolatedActivities={isolatedActivities} setIsolatedActivities={setIsolatedActivities} />
-        <IsolateActivityButton badge={'🏊'} activity={'Swim'} isolatedActivity={isolatedActivity} setIsolatedActivity={setIsolatedActivity} isolatedActivities={isolatedActivities} setIsolatedActivities={setIsolatedActivities} />
+        <FilterActivityButton badge={'🏃'} activity={'Run'} filteredActivity={filteredActivity} setFilteredActivity={setFilteredActivity}
+        filteredActivities={filteredActivities} setFilteredActivities={setFilteredActivities} />
+        <FilterActivityButton badge={'🚴'} activity={'Ride'} filteredActivity={filteredActivity} setFilteredActivity={setFilteredActivity} filteredActivities={filteredActivities} setFilteredActivities={setFilteredActivities} />
+        <FilterActivityButton badge={'🏊'} activity={'Swim'} filteredActivity={filteredActivity} setFilteredActivity={setFilteredActivity} filteredActivities={filteredActivities} setFilteredActivities={setFilteredActivities} />
+        -&nbsp;
+        <DisplayStyleButton style={'List'} display={display} setDisplay={setDisplay}/>
+        <DisplayStyleButton style={'Week'} display={display} setDisplay={setDisplay}/>
+        <DisplayStyleButton style={'Month'} display={display} setDisplay={setDisplay}/>
+        <DisplayStyleButton style={'Year'} display={display} setDisplay={setDisplay}/>
       </div>
-      <table>
-      {isolatedActivities.map(activity =>
-        <tr>
-          <td>{activity.type==='Run'?'🏃'
-            :activity.type==='Ride'?'🚲'
-            :activity.type==='Swim'?'🏊'
-            :activity.type==='Hike'?'🥾'
-            :activity.type==='InlineSkate'?'🛼'
-            :activity.type==='RockClimb'?'🧗'
-            :activity.type==='Canoe'?'🛶'
-            :activity.type==='Kayak'?'🛶'
-            :activity.type==='Row'?'🚣'
-            :activity.type==='Walk'?'🚶'
-            :'🕴️'}</td>
-          <td>{activity.name}</td>
-          <td>{(activity.distance / (metric?1000:1609.344)).toFixed(1)}<em>.</em>{metric?'km':'mi'}</td>
-          <td>{(activity.total_elevation_gain*(metric?1:3.28084)).toFixed(0)}{metric?'m':'ft'}</td>
-          <td>{timeFormatter.fromSeconds(activity.moving_time)}</td>
-        </tr>
-      )}
-      </table>
+      {display === 'List' && <DisplayList filteredActivities={filteredActivities} metric={metric} />}
+      {display === 'Year' && <DisplayYear filteredActivities={filteredActivities} metric={metric} />}
     </div>
   )
 }
