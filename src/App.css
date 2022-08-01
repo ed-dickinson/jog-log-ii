@@ -189,3 +189,38 @@ table em {
   border: 0;
   cursor: pointer;
 }
+
+.Foot {
+  background-image: url('/public/foot.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 1em; width: 100%;
+  display: inline-block;
+}
+
+.DisplayYearTable {
+  border-collapse: collapse;
+}
+
+.DisplayYearTable {
+  width: 100%;
+}
+
+.DisplayYearTable tr {
+  border-bottom: 2px solid var(--strava);
+  /* background-color: red; */
+  width: 100%;
+  height: 4em;
+}
+
+.DisplayYearTable tr th {
+  position: absolute;
+}
+
+.DisplayYearTable tr td {
+  width: calc(100% / 12);
+  height: 4em;
+  /* position: relative; */
+  /* display: block; */
+}

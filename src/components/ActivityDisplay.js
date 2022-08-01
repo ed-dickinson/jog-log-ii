@@ -65,7 +65,7 @@ const ActivityDisplay = ({activities, setActivities, metric}) => {
     console.log('filter by', filteredActivity)
     filterActivities(filteredActivity)
 
-  }, [filteredActivity])
+  }, [filteredActivity, activities])
 
   // let temp_activities = []
   // activities.forEach(activity => {
