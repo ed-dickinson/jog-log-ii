@@ -80,17 +80,17 @@ function App() {
         </div>
       }
 
-      
+
 
       {athlete!==null &&
-        <div>
+        <main>
           <div className={"LoadingInfo"+(activities.length===0?' NoneLoaded':'')}>
             Loaded {activities.length} activities{loaded?'  ':'... '}
             <div className={"LoadingBar "+(loaded?"Loaded":'Loading')}><span>{loaded?"👍":"🤞"}</span></div>
           </div>
 
           <ActivityDisplay activities={activities} setActivities={setActivities} metric={metric} />
-        </div>
+        </main>
       }
 
     </div>

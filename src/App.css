@@ -6,15 +6,21 @@
   /* text-align: center; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* position: static; */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  margin-top: 0.5em;
 }
 
 /* .App-header {
@@ -190,13 +196,38 @@ table em {
   cursor: pointer;
 }
 
-.Foot {
-  background-image: url('/public/foot.png');
+.Token {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   height: 1em; width: 100%;
   display: inline-block;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+.Token.Leg {
+  background-image: url('/public/leg.png');
+}
+.Token.Foot {
+  background-image: url('/public/foot.png');
+}
+.Token.Bike {
+  background-image: url('/public/bicycle.png');
+}
+.Token.Swimmer {
+  background-image: url('/public/swimmer.png');
+}
+
+.TokenLabel {
+  text-align: center;
+  font-weight: 500;
+  /* color: var(--strava); */
+  /* position: absolute; */
+  /* z-index: 100000; */
 }
 
 .DisplayYearTable {
@@ -212,15 +243,18 @@ table em {
   /* background-color: red; */
   width: 100%;
   height: 4em;
+  position: relative;
 }
 
 .DisplayYearTable tr th {
   position: absolute;
+  bottom: 0;
 }
 
 .DisplayYearTable tr td {
   width: calc(100% / 12);
   height: 4em;
+  position: relative;
   /* position: relative; */
   /* display: block; */
 }

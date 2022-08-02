@@ -3,6 +3,7 @@ import timeFormatter from '../formatters/timeFormatter'
 
 import DisplayList from './DisplayList'
 import DisplayYear from './DisplayYear'
+import DisplayMonth from './DisplayMonth'
 
 
 /*
@@ -22,7 +23,7 @@ import DisplayYear from './DisplayYear'
 
 const FilterActivityButton = ({badge, activity, filteredActivity, setFilteredActivity, filteredActivities, setFilteredActivities}) => {
   return (
-    <button className={'FilterButton '+(filteredActivity===activity?'Selected':'Unselected')} onClick={()=>setFilteredActivity(activity)}>{badge}</button>
+    <button className={'FilterButton '+(filteredActivity===activity?'Selected':'Unselected')} onClick={()=>setFilteredActivity(filteredActivity===activity?'None':activity)}>{badge}</button>
   )
 }
 
@@ -89,7 +90,8 @@ const ActivityDisplay = ({activities, setActivities, metric}) => {
         <DisplayStyleButton style={'Year'} display={display} setDisplay={setDisplay}/>
       </div>
       {display === 'List' && <DisplayList filteredActivities={filteredActivities} metric={metric} />}
-      {display === 'Year' && <DisplayYear filteredActivities={filteredActivities} metric={metric} />}
+      {display === 'Year' && <DisplayYear filteredActivities={filteredActivities} metric={metric} filter={filteredActivity}/>}
+      {display === 'Month' && <DisplayMonth filteredActivities={filteredActivities} metric={metric} filter={filteredActivity}/>}
     </div>
   )
 }

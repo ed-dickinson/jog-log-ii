@@ -37,20 +37,28 @@ import timeFormatter from '../formatters/timeFormatter'
 //   </tr>
 // )}
 
-const DisplayYear = ({filteredActivities, metric, filter}) => {
+const DisplayMonth = ({filteredActivities, metric, filter}) => {
 
-  let by_year = []
+  let by_month = []
 
   const now = new Date()
+
+  const month_now = now.getMonth()
+  const year_now = now.getFullYear()
+
+  const month_lengths = [31,28,31, 30,31,30, 31,31,30, 31,30,31]
+
+  const leap_years = [2032,2028,2024,2020,2016,2012,2008]
+  // if year % 4 === 0 then leap
 
   const stats = {longest_month: 0}
 
   filteredActivities.forEach(activity => {
     let date = new Date(activity.start_date_local)
     let year = date.getFullYear()
-    let year_index = now.getFullYear() - year
+    let year_index = year_now - year
     let month = date.getMonth()
-    // console.log(month)
+
     if (by_year[year_index]===undefined) {
       by_year[year_index] = {year, distance: 0, elevation: 0, by_months: []}
       for (let i = 0; i < 12; i++) {
@@ -62,22 +70,14 @@ const DisplayYear = ({filteredActivities, metric, filter}) => {
     by_year[year_index].distance += activity.distance
     by_year[year_index].elevation += activity.elevation
 
-
-    // if (by_year[year_index].by_months[month]===undefined) {
-    //   by_year[year_index].by_months[month] = {distance : 0}
-    // }
     by_year[year_index].by_months[month].distance += activity.distance
 
     if (by_year[year_index].by_months[month].distance > stats.longest_month) {
       stats.longest_month = by_year[year_index].by_months[month].distance
     }
-    // console.log(date.getFullYear())
-  })
-  //
-  // // console.log(filteredActivities)
-  console.log(by_year, stats.longest_month)
 
-  // console.log(filteredActivities)
+  })
+
 
   return (
     <table className="DisplayYearTable">
@@ -102,4 +102,4 @@ const DisplayYear = ({filteredActivities, metric, filter}) => {
   )
 }
 
-export default DisplayYear
+export default DisplayMonth
