@@ -230,15 +230,15 @@ table em {
   /* z-index: 100000; */
 }
 
-.DisplayYearTable {
+.DisplayTable {
   border-collapse: collapse;
 }
 
-.DisplayYearTable {
+.DisplayTable {
   width: 100%;
 }
 
-.DisplayYearTable tr {
+.DisplayTable tr {
   border-bottom: 2px solid var(--strava);
   /* background-color: red; */
   width: 100%;
@@ -246,15 +246,54 @@ table em {
   position: relative;
 }
 
-.DisplayYearTable tr th {
+.DisplayTable tr th {
   position: absolute;
-  bottom: 0;
+  top: calc(100% - 1em);
+  /* vertical-align: bottom; */
 }
 
-.DisplayYearTable tr td {
+.DisplayTable tr td {
   width: calc(100% / 12);
   height: 4em;
   position: relative;
   /* position: relative; */
   /* display: block; */
+}
+
+.DisplayYear {
+
+}
+
+.DisplayMonth {
+
+}
+
+div.DisplayTable > div {
+  height: 4em;
+  position: relative;
+  width: 100%;
+}
+
+div.DisplayTable > div > span {
+  height: 4em;
+  position: absolute;
+  display: inline-block;
+}
+
+div.DisplayTable > span .Token {
+  display: inline-block;
+}
+
+.DisplayTable .HoverInfo {
+  position: fixed;
+  bottom: 2em;
+  left: 50%;
+  transform: translate(-50%);
+  border: 2px solid var(--strava);
+  display: inline-block;
+  width: auto;
+  padding: 0.25em 0.5em;
+  border-radius: 0.5em;
+  background-color: white;
+  height: auto;
 }

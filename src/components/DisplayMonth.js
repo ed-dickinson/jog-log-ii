@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
 // , {useState, useEffect}
 import timeFormatter from '../formatters/timeFormatter'
+import dateFormatter from '../formatters/dateFormatter'
 
 /*
   activity has:
@@ -41,15 +42,14 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
 
   let by_month = []
 
+  const [activityHighlight, setActivityHighlight] = useState(null)
+
+  const month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
   const now = new Date()
 
   const month_now = now.getMonth()
   const year_now = now.getFullYear()
-
-  const month_lengths = [31,28,31, 30,31,30, 31,31,30, 31,30,31]
-
-  const leap_years = [2032,2028,2024,2020,2016,2012,2008]
-  // if year % 4 === 0 then leap
 
   const stats = {longest_month: 0}
 
@@ -58,46 +58,72 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
     let year = date.getFullYear()
     let year_index = year_now - year
     let month = date.getMonth()
+    let month_index = month_now - month
+    // console.log(month_now)
+    if (activity.month > month_now || month_index < 0) {
+      month_index += (year_index * 12)
+    }
 
-    if (by_year[year_index]===undefined) {
-      by_year[year_index] = {year, distance: 0, elevation: 0, by_months: []}
-      for (let i = 0; i < 12; i++) {
-        by_year[year_index].by_months.push({distance: 0})
+
+
+    let day = date.getDate()
+
+    if (by_month[month_index]===undefined) {
+
+      by_month[month_index] = {month_index, distance: 0, elevation: 0, by_days: [], name: month_names[month], year: (year+'').substr(2,2)}
+      let days_in_month = month === 1 ? (year % 4 === 0 ? 29 : 28) : [3,5,8,10].some((x)=>x===month) ? 30 : 31
+      for (let i = 0; i < days_in_month; i++) {
+        by_month[month_index].by_days.push({day: i, distance: 0, elevation: 0})
       }
 
     }
 
-    by_year[year_index].distance += activity.distance
-    by_year[year_index].elevation += activity.elevation
+    by_month[month_index].by_days[day-1].distance += activity.distance
+    by_month[month_index].by_days[day-1].elevation += activity.elevation
+    by_month[month_index].by_days[day-1].activity = activity
 
-    by_year[year_index].by_months[month].distance += activity.distance
+    by_month[month_index].distance += activity.distance
+    by_month[month_index].elevation += activity.elevation
 
-    if (by_year[year_index].by_months[month].distance > stats.longest_month) {
-      stats.longest_month = by_year[year_index].by_months[month].distance
-    }
+    // by_month[month_index].by_months[month].distance += activity.distance
+
+    // if (by_month[year_index].by_months[month].distance > stats.longest_month) {
+    //   stats.longest_month = by_month[month_index].by_months[month].distance
+    // }
 
   })
 
+  console.log(by_month)
 
   return (
-    <table className="DisplayYearTable">
-      <thead>
+    <div className="DisplayTable DisplayMonth">
 
-      </thead>
-      <tbody>
-      {by_year.map(year =>
-        <tr key={year.year} style={{borderBottomWidth:((year.distance/100000)/(filter==='Run'?1:filter==='Swim'?0.1:1))+'px'}}>
-          <th>{year.year}</th>
-          {year.by_months.map(month =>
-            <td>
-              <div className={"Token "+(filter==='None'?'Leg':filter==='Run'?'Foot':filter==='Ride'?'Bike':'Swimmer')} style={{width:(month.distance/stats.longest_month*100)+'%', height: (month.distance/stats.longest_month*100)+'%'}}></div>
-              <div className="TokenLabel">{(month.distance/1000).toFixed(0)}</div>
-            </td>
+      {by_month.map(month =>
+        <div key={month.month_index} style={{borderBottomWidth:((month.distance/100000)/(filter==='Run'?1:filter==='Swim'?0.1:1))+'px'}}>
+          <label>{month.name + " '" + month.year}</label>
+          {month.by_days.map(day =>
+            <span
+              style={{width:(100/month.by_days.length)+'%', left: ((100/month.by_days.length)*day.day)+'%'}}
+              onMouseEnter={()=>setActivityHighlight(day.activity)}
+              onMouseLeave={()=>setActivityHighlight(null)}
+            >
+              <div className={"Token "+(filter==='None'?'Leg':filter==='Run'?'Foot':filter==='Ride'?'Bike':'Swimmer')} style={{width:(day.distance/stats.longest_day*100)+'%', height: (month.distance/stats.longest_month*100)+'%'}}></div>
+              <div className="TokenLabel">{(day.distance/1000).toFixed(0)}</div>
+            </span>
           )}
-        </tr>
+        </div>
       )}
-      </tbody>
-    </table>
+
+      {(activityHighlight!==null && activityHighlight!==undefined) &&
+        <div className="HoverInfo">
+          {activityHighlight.name}<br />
+          {(activityHighlight.distance/1000).toFixed(1)}km <br />
+          {dateFormatter.traditional(activityHighlight.start_date_local)}
+        </div>
+      }
+
+
+    </div>
 
   )
 }

@@ -80,7 +80,7 @@ const DisplayYear = ({filteredActivities, metric, filter}) => {
   // console.log(filteredActivities)
 
   return (
-    <table className="DisplayYearTable">
+    <table className="DisplayTable DisplayYear">
       <thead>
 
       </thead>
