@@ -228,6 +228,14 @@ table em {
   /* color: var(--strava); */
   /* position: absolute; */
   /* z-index: 100000; */
+  color: white;
+  background-color: var(--strava);
+  border-radius: 50%;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 0.75em;
+  padding: 0.25em;
+  text-align: center;
 }
 
 .DisplayTable {
@@ -280,8 +288,30 @@ div.DisplayTable > div > span {
   display: inline-block;
 }
 
-div.DisplayTable > span .Token {
+div.DisplayTable > div.Row {
+  border-bottom-color: var(--strava);
+  border-bottom-style: solid;
+}
+
+div.DisplayTable > div.Row label {
+  font-weight: bold;
+}
+
+div.DisplayTable > div > span .Token {
   display: inline-block;
+  transform: translate(-50%, -50%) scale(4);
+}
+div.DisplayTable > div > span .TokenLabel {
+  bottom: 0;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--strava);
+  color: white;
+  font-size: 0.75em;
+  padding: 0.25em;
+  width: 1.2em;
+  display: inline-block;
+  height: 1.2em;
 }
 
 .DisplayTable .HoverInfo {

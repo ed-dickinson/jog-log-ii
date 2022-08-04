@@ -91,7 +91,10 @@ const DisplayYear = ({filteredActivities, metric, filter}) => {
           {year.by_months.map(month =>
             <td>
               <div className={"Token "+(filter==='None'?'Leg':filter==='Run'?'Foot':filter==='Ride'?'Bike':'Swimmer')} style={{width:(month.distance/stats.longest_month*100)+'%', height: (month.distance/stats.longest_month*100)+'%'}}></div>
-              <div className="TokenLabel">{(month.distance/1000).toFixed(0)}</div>
+              
+              {month.distance > 0 &&
+                <div className="TokenLabel">{(month.distance/1000).toFixed(0)}</div>
+              }
             </td>
           )}
         </tr>

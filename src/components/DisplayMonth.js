@@ -51,7 +51,7 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
   const month_now = now.getMonth()
   const year_now = now.getFullYear()
 
-  const stats = {longest_month: 0}
+  const stats = {longest_day: 0}
 
   filteredActivities.forEach(activity => {
     let date = new Date(activity.start_date_local)
@@ -59,18 +59,16 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
     let year_index = year_now - year
     let month = date.getMonth()
     let month_index = month_now - month
-    // console.log(month_now)
-    if (activity.month > month_now || month_index < 0) {
-      month_index += (year_index * 12)
-    }
 
+    // this sorts it out no matter if month is ahead or behind in the year!
+    month_index += (year_index * 12)
 
 
     let day = date.getDate()
 
     if (by_month[month_index]===undefined) {
 
-      by_month[month_index] = {month_index, distance: 0, elevation: 0, by_days: [], name: month_names[month], year: (year+'').substr(2,2)}
+      by_month[month_index] = {month_index, distance: 0, elevation: 0, by_days: [], name: month_names[month], year: (year+'').substr(2,2), debug:{month_index, year_index}}
       let days_in_month = month === 1 ? (year % 4 === 0 ? 29 : 28) : [3,5,8,10].some((x)=>x===month) ? 30 : 31
       for (let i = 0; i < days_in_month; i++) {
         by_month[month_index].by_days.push({day: i, distance: 0, elevation: 0})
@@ -79,17 +77,17 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
     }
 
     by_month[month_index].by_days[day-1].distance += activity.distance
-    by_month[month_index].by_days[day-1].elevation += activity.elevation
+    by_month[month_index].by_days[day-1].elevation += activity.total_elevation_gain
     by_month[month_index].by_days[day-1].activity = activity
 
     by_month[month_index].distance += activity.distance
-    by_month[month_index].elevation += activity.elevation
+    by_month[month_index].elevation += activity.total_elevation_gain
 
     // by_month[month_index].by_months[month].distance += activity.distance
 
-    // if (by_month[year_index].by_months[month].distance > stats.longest_month) {
-    //   stats.longest_month = by_month[month_index].by_months[month].distance
-    // }
+    if (by_month[month_index].by_days[day-1].distance > stats.longest_day) {
+      stats.longest_day = by_month[month_index].by_days[day-1].distance
+    }
 
   })
 
@@ -99,7 +97,8 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
     <div className="DisplayTable DisplayMonth">
 
       {by_month.map(month =>
-        <div key={month.month_index} style={{borderBottomWidth:((month.distance/100000)/(filter==='Run'?1:filter==='Swim'?0.1:1))+'px'}}>
+        <div className="Row" key={month.month_index} style={{borderBottomWidth:((month.distance/100000)/(filter==='Run'?0.1:filter==='Swim'?0.01:0.4))+'px'}}>
+          month_index: {month.debug.month_index} -&nbsp;
           <label>{month.name + " '" + month.year}</label>
           {month.by_days.map(day =>
             <span
@@ -108,7 +107,11 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
               onMouseLeave={()=>setActivityHighlight(null)}
             >
               <div className={"Token "+(filter==='None'?'Leg':filter==='Run'?'Foot':filter==='Ride'?'Bike':'Swimmer')} style={{width:(day.distance/stats.longest_day*100)+'%', height: (month.distance/stats.longest_month*100)+'%'}}></div>
-              <div className="TokenLabel">{(day.distance/1000).toFixed(0)}</div>
+
+              {day.distance>0 &&
+                <div className="TokenLabel">{(day.distance/1000).toFixed(0)}</div>
+              }
+
             </span>
           )}
         </div>
