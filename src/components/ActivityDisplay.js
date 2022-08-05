@@ -4,6 +4,7 @@ import timeFormatter from '../formatters/timeFormatter'
 import DisplayList from './DisplayList'
 import DisplayYear from './DisplayYear'
 import DisplayMonth from './DisplayMonth'
+import DisplayWeek from './DisplayWeek'
 
 
 /*
@@ -92,6 +93,7 @@ const ActivityDisplay = ({activities, setActivities, metric}) => {
       {display === 'List' && <DisplayList filteredActivities={filteredActivities} metric={metric} />}
       {display === 'Year' && <DisplayYear filteredActivities={filteredActivities} metric={metric} filter={filteredActivity}/>}
       {display === 'Month' && <DisplayMonth filteredActivities={filteredActivities} metric={metric} filter={filteredActivity}/>}
+      {display === 'Week' && <DisplayWeek filteredActivities={filteredActivities} metric={metric} filter={filteredActivity}/>}
     </div>
   )
 }

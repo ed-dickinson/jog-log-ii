@@ -38,9 +38,11 @@ import dateFormatter from '../formatters/dateFormatter'
 //   </tr>
 // )}
 
-const DisplayMonth = ({filteredActivities, metric, filter}) => {
+const DisplayWeek = ({filteredActivities, metric, filter}) => {
 
   let by_month = []
+
+  let by_week = []
 
   const [activityHighlight, setActivityHighlight] = useState(null)
 
@@ -48,10 +50,14 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
 
   const now = new Date()
 
+  const day_now = now.getDay()===0 ? 6 : now.getDay()-1 //[out of 0-6] (0 is sunday)
+
+  // day index today should be 0
+
   const month_now = now.getMonth()
   const year_now = now.getFullYear()
 
-  const stats = {longest_day: 0, longest_month: 0, longest_month_adj: 0, longest_day_adj: 0 }
+  const stats = {longest_day: 0, longest_month: 0, longest_month_adj: 0, longest_day_adj: 0, longest_week: 0, longest_week_adj: 0}
 
   const compare = (compare, current) => {
     if (compare > current) {
@@ -68,59 +74,75 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
     let month = date.getMonth()
     let month_index = month_now - month
 
+
+
+    let day_of_week = date.getDay()===0 ? 6 : (date.getDay()-1)
+    let day_index = Math.round((new Date(now.toDateString()) - new Date(date.toDateString()))  / (1000*3600*24))
+
+    let week_index = Math.floor((day_index) / 7)
+
+    if (day_of_week > day_now) {
+      week_index++
+    }
+
+
+
     // this sorts it out no matter if month is ahead or behind in the year!
     month_index += (year_index * 12)
 
 
     let day = date.getDate()
 
-    if (by_month[month_index]===undefined) {
 
-      by_month[month_index] = {
-        month_index, distance: 0, elevation: 0, by_days: [], name: month_names[month], year: (year+'').substr(2,2), adjusted_distance: 0,
-        debug:{month_index, year_index}
+
+    if (by_week[week_index]===undefined) {
+
+      let date_copy = date
+      date_copy = date_copy - (day_of_week*24*3600*1000)
+      let date_plus_6 = date_copy + (6*24*3600*1000)
+
+      by_week[week_index] = {
+        week_index, distance: 0, elevation: 0, by_days: [], name: `${dateFormatter.week(new Date(date_copy), new Date(date_plus_6))}`, adjusted_distance: 0,
+        debug:{week_index}
       }
-      let days_in_month = month === 1 ? (year % 4 === 0 ? 29 : 28) : [3,5,8,10].some((x)=>x===month) ? 30 : 31
-      for (let i = 0; i < days_in_month; i++) {
-        by_month[month_index].by_days.push({day: i, distance: 0, elevation: 0, adjusted_distance: 0})
+      for (let i = 0; i < 7; i++) {
+        by_week[week_index].by_days.push({day: i, distance: 0, elevation: 0, adjusted_distance: 0})
       }
 
     }
 
-    by_month[month_index].by_days[day-1].distance += activity.distance
-    by_month[month_index].by_days[day-1].elevation += activity.total_elevation_gain
-    by_month[month_index].by_days[day-1].activity = activity
-    by_month[month_index].by_days[day-1].adjusted_distance += (activity.distance * (activity.type==='Ride'?0.25:activity.type==='Swim'?10:1))
+    by_week[week_index].by_days[day_of_week].distance += activity.distance
+    by_week[week_index].by_days[day_of_week].elevation += activity.total_elevation_gain
+    by_week[week_index].by_days[day_of_week].activity = activity
+    by_week[week_index].by_days[day_of_week].adjusted_distance += (activity.distance * (activity.type==='Ride'?0.25:activity.type==='Swim'?10:1))
 
-    by_month[month_index].distance += activity.distance
-    by_month[month_index].adjusted_distance += activity.adjusted_distance
-    by_month[month_index].elevation += activity.total_elevation_gain
+    by_week[week_index].distance += activity.distance
+    by_week[week_index].adjusted_distance += activity.adjusted_distance
+    by_week[week_index].elevation += activity.total_elevation_gain
 
-    // by_month[month_index].by_months[month].distance += activity.distance
+    // by_week[week_index].by_weeks[week].distance += activity.distance
 
-    stats.longest_day = compare(by_month[month_index].by_days[day-1].distance, stats.longest_day)
-    stats.longest_day_adj = compare(by_month[month_index].by_days[day-1].adjusted_distance, stats.longest_day_adj)
+    stats.longest_day = compare(by_week[week_index].by_days[day_of_week].distance, stats.longest_day)
+    stats.longest_day_adj = compare(by_week[week_index].by_days[day_of_week].adjusted_distance, stats.longest_day_adj)
 
 
   })
 
-  by_month.forEach(month => {
-    stats.longest_month = compare(month.distance, stats.longest_month)
-    stats.longest_month_adj = compare(month.adjusted_distance, stats.longest_month_adj)
+  by_week.forEach(week => {
+    stats.longest_week = compare(week.distance, stats.longest_week)
+    stats.longest_week_adj = compare(week.adjusted_distance, stats.longest_week_adj)
   })
 
-  for (let i = 0; i < by_month.length; i++) {
-    // if (month===undefined) {
-    //
-    // }
-    if (by_month[i] === undefined) {
-      let year = year_now - (i - (i % 12)) / 12
-      by_month[i] = {
-        month_index : i, distance: 0, elevation: 0, by_days: [],
-        name: month_names[(i%12)>month_now?month_now+12-(i%12):month_now-(i%12)],
-        year: (year+'').substr(2,2)}
-    }
-  }
+  // for (let i = 0; i < by_week.length; i++) {
+  //
+  //   if (by_week[i] === undefined) {
+  //     let year = year_now - (i - (i % 12)) / 12
+  //     by_week[i] = {
+  //       week_index : i, distance: 0, elevation: 0, by_days: [],
+  //       name: month_names[(i%12)>month_now?month_now+12-(i%12):month_now-(i%12)],
+  //       year: (year+'').substr(2,2)}
+  //   }
+  // }
 
 // backgroundColor:`hsl(19.5,100%,${100-((month.distance/stats.longest_month)*50.6)}%)`
   // console.log(by_month)
@@ -128,21 +150,23 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
   // className={"Token "+(filter==='None'?'Leg':filter==='Run'?'Foot':filter==='Ride'?'Bike':'Swimmer')}
 
   return (
-    <div className="DisplayTable DisplayMonth">
+    <div className="DisplayTable DisplayWeek">
 
-      {by_month.map(month =>
-        <div className="Row" key={month.month_index}
+      {by_week.map(week =>
+        <div className="Row" key={week.week_index}
           style={{
-            borderBottomWidth:((month.distance/100000)/(filter==='Run'?0.1:filter==='Swim'?0.01:0.4))+'px'
+            borderBottomWidth:((week.distance/100000)/(filter==='Run'?0.1:filter==='Swim'?0.01:0.4))+'px'
           }}>
 
-          <label>{month.name + " '" + month.year}</label>
-          {month.by_days.map(day =>
+          <label>{week.week_index} - {week.name}</label>
+          {week.by_days.map(day =>
+
             <span
-              style={{width:(100/month.by_days.length)+'%', left: ((100/month.by_days.length)*day.day)+'%'}}
+              style={{width:(100/week.by_days.length)+'%', left: ((100/7)*day.day)+'%'}}
               onMouseEnter={()=>setActivityHighlight(day.activity)}
               onMouseLeave={()=>setActivityHighlight(null)}
             >
+            {day.day}
               <div
                 className={"Token "+(day.activity===undefined?'Leg':day.activity.type==='Run'?'Foot':day.activity.type==='Ride'?'Bike':day.activity.type==='Swim'?'Swimmer':'Leg')}
                 style={{width:(day.adjusted_distance/stats.longest_day_adj*100)+'%', height: (day.adjusted_distance/stats.longest_day_adj*100)+'%'}}
@@ -161,7 +185,7 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
         <div className="HoverInfo">
           {activityHighlight.name}<br />
           {(activityHighlight.distance/1000).toFixed(1)}km <br />
-          {dateFormatter.traditional(activityHighlight.start_date_local)}
+          {dateFormatter.traditionalWithDay(activityHighlight.start_date_local)}
         </div>
       }
 
@@ -171,4 +195,4 @@ const DisplayMonth = ({filteredActivities, metric, filter}) => {
   )
 }
 
-export default DisplayMonth
+export default DisplayWeek
