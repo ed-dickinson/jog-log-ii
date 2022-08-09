@@ -153,12 +153,15 @@ const DisplayWeek = ({filteredActivities, metric, filter}) => {
     <div className="DisplayTable DisplayWeek">
 
       {by_week.map(week =>
-        <div className="Row" key={week.week_index}
-          style={{
-            borderBottomWidth:((week.distance/100000)/(filter==='Run'?0.1:filter==='Swim'?0.01:0.4))+'px'
-          }}>
+        <div className="Row" key={week.week_index}>
 
-          <label>{week.week_index} - {week.name}</label>
+          <label><span className="Name">{week.name}</span>
+            <div className="WeekStats">
+              {(week.distance/(metric?1000:1609.344)).toFixed(0)} {metric?'km':'mi'}
+            </div>
+            <span className="WeekRelative" style={{width:(week.distance/stats.longest_week*100)+'%'}}></span>
+          </label>
+
           {week.by_days.map(day =>
 
             <span
@@ -178,6 +181,7 @@ const DisplayWeek = ({filteredActivities, metric, filter}) => {
 
             </span>
           )}
+
         </div>
       )}
 
