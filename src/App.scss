@@ -1,0 +1,246 @@
+// $border: 1px solid black;
+// $border-radius: 5px;
+
+$strava-orange: #fc4c02;
+$not-strava-blue: #02b3fd;
+
+@mixin border {
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px grey;
+}
+
+// @mixin
+
+.App {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.App main {
+  padding: 1em;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: $not-strava-blue;
+}
+a:hover {
+  filter: contrast(175%);
+}
+
+nav {
+  @include border;
+  margin: 1em;
+
+  font-family: 'Luminari', Luminari, luminari;
+  font-family: 'Garamond', Garamond, garamond;
+
+  text-align: right;
+  // &:hover {
+  //   box-shadow: 0px 2px 5px grey;
+  // }
+
+  z-index: 20;
+
+  position: relative;
+
+  background-color: white;
+
+  .StravaConnectButton {
+    border: 0;
+    background-color: transparent;
+    // max-height: 20px;
+    &:hover {
+      opacity: 0.8;
+    }
+    img {
+      height: 3em;
+      width: auto;
+      display: inline-block;
+    }
+  }
+  img.AppleLogo {
+    height: 108px;
+    position: absolute;
+    left: 5px - 12px;
+    top: -10px - 16px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    filter: drop-shadow(1px 1px 2px grey);
+  }
+
+
+  .NewRunButton {
+    // height: 2em;
+    // width: 2em;
+    // display: inline-block;
+    // background-image: url('../public/Odds60.png');
+    // background-size: contain;
+    border: 0;
+    background-color: transparent;
+
+    &:hover {
+      // mix-blend-mode: difference;
+      filter: invert(0.2);
+    }
+  }
+
+  .UserButton {
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 4px 0 0 0;
+    height: 38px;
+    width: 34px;
+  }
+
+
+}
+
+.ProfileContainer {
+  height: 0;
+  position: relative;
+  // width: 100%;
+  @extend nav;
+
+  border: 0;
+  box-shadow: 0px 0px 0px white;
+
+
+  margin-top: -1.5em;
+
+  box-sizing: border-box;
+
+  z-index: 18;
+
+  // overflow-y: hidden;
+
+  // hides profile drawer
+  &::before {
+    content: '';
+    position: absolute;
+    right: -0.5em;
+    bottom: 50%;
+    width: calc(100% + 1em);
+    background-color: white;
+    height: 100px;
+    z-index: 22;
+  }
+}
+.Profile {
+  @extend nav;
+  margin: 0;
+
+  position: absolute;
+  right: 0;
+  padding: 1em 0.5em 0.5em;
+  // width: 100%;
+
+  transform: translateY(-100%);
+  transition: 0.5s transform;
+
+  &.show {
+    transform: translateY(0%);
+  }
+}
+
+.StravaAthlete {
+  img {
+    filter: grayscale(1);
+  }
+}
+
+main {
+  margin-top: 2em;
+
+  .PageTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+    font-family: Garamond;
+    letter-spacing: 0.02em;
+  }
+}
+
+
+
+aside.Writer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  min-width: 132px;
+  min-height: 251px;
+  max-width: 600px;
+  width: calc(100% - 82px);
+  height: 300px;
+
+  .Hand {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 132px;
+    height: 251px;
+    background-image: url('../public/assets/Hand Note Card --transparent-cropped-noline.png');
+  }
+
+  .Card {
+    background-color: white;
+    width: calc(100% - 114px);
+    height: calc(100% - 19px);
+    position: absolute;
+    left: 112px;
+    bottom: 17px;
+    border: 1px solid black;
+  }
+
+  transition: transform 0.5s;
+  &.hide {
+    transform: translateY(100%);
+  }
+
+  .CloseButton {
+    top: 3px;
+    right: 3px;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+  }
+}
+
+.CloseButton {
+  border: 0;
+  background-image: url('../public/assets/184-close.png');
+  background-size: contain;
+  background-color: white;
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+footer {
+  @include border;
+
+  margin: 1em;
+
+  img {
+    max-height: 1.5em;
+  }
+
+}
+//
+// @media (prefers-reduced-motion: no-preference) {
+//   .React-logo {
+//     animation: App-logo-spin infinite 20s linear;
+//   }
+// }
+//
+// @keyframes App-logo-spin {
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }

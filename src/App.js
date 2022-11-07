@@ -1,21 +1,26 @@
-// import logo from './logo.svg';
 import React, {useState, useEffect} from 'react'
-import './App.css';
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import './App.scss';
+
 import oAuthService from './services/oauth'
 import stravaService from './services/strava'
 
-import Athlete from './components/Athlete'
-import ActivityDisplay from './components/ActivityDisplay'
+// import Router from './Router'
 
-
-
-// let athlete = response.athlete
-
-
-
-
+import Nav from './components/Nav'
+import Intro from './components/Intro'
+import Footer from './components/Footer'
+import Writer from './components/Writer'
+import Profile from './components/Profile'
+import StravaAthlete from './components/StravaAthlete'
+import PermissionFailure from './components/PermissionFailure'
 
 function App() {
+
+  const [writerOpen, setWriterOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
 
   const [athlete, setAthlete] = useState(null)
   const [activities, setActivities] = useState([])
@@ -25,18 +30,25 @@ function App() {
   const [scope, setScope] = useState(null)
 
   var queryString = window.location.search;
+
+  console.log('queryString:', queryString)
   const urlParams = new URLSearchParams(queryString);
+  console.log(scope, urlParams.get('scope'))
   // const scope = urlParams.get('scope')
   if (urlParams.get('scope') === 'read,activity:read_all,read_all' && scope === null) {
-    console.log(scope)
+    console.log('scope:', scope)
     setScope('read,activity:read_all,read_all')
+    console.log('scope:', scope)
+  } else {
+    console.log('')
   }
   var temp_token = urlParams.get('code');
-  // console.log(temp_token)
 
-  // console.log(process.env.REACT_APP_CLIENT_SECRET, temp_token)
-  // const response = await
-  // const response =
+  useEffect(()=>{
+    console.log('athlete changed', athlete)
+  }, [athlete])
+
+  // console.log(temp_token)
 
   useEffect(()=>{
     oAuthService.exchange({
@@ -47,8 +59,11 @@ function App() {
     }).then(result => {
       console.log(result)
       console.log(new Date().getTime() > result.expires_at * 1000  ? 'expired' : 'valid')
+
       setAthlete(result.athlete)
-      console.log('athlete:', athlete)
+      localStorage.setItem('TokenExpires', result.expires_at);
+
+      localStorage.setItem('Athlete', athlete);
       stravaService.allActivities({
         access_token : result.access_token,
         activities : activities , setActivities : setActivities
@@ -59,49 +74,46 @@ function App() {
     })
   }, [scope])
 
-
-
+// <Route path="/profile" element={<Profile />} />
 
   return (
     <div className="App">
+    <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
+      <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
       <header className="App-header">
-        {athlete!==null &&
-          <Athlete athlete={athlete} />
-        }
-        <button className="MetricButton" onClick={()=>setMetric(!metric)}>{metric?'🇫🇷':'🇬🇧'}</button>
+
       </header>
 
-      {athlete===null &&
-        <div className="Unconnected">
-          <img src="jl-icon.png" alt="logo" /> <br />
-          <a href="http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri=http://localhost:3001/approval&approval_prompt=auto&scope=read_all,activity:read_all">
-          <img src="connect-orange.png" alt="Strava authorize button" />
-          </a>
-        </div>
-      }
+
+      <main>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Intro />} />
+
+            <Route path="/approval" element={<div>
+              redirect
+              {scope !== 'read,activity:read_all,read_all' ? <PermissionFailure /> : ''}
+              {athlete !== null ? athlete.firstname : 'athlete null'}
+              {athlete !== null &&
+                <StravaAthlete athlete={athlete}/>
+              }
+
+              </div>} />
+          </Routes>
+        </BrowserRouter>
+        <button style={{width: '100%', height: '300px'}}>
+          Massive button to test {'<main>'} interactivity.
+        </button>
+      </main>
 
 
 
-      {athlete!==null &&
-        <main>
-          <div className={"LoadingInfo"+(activities.length===0?' NoneLoaded':'')}>
-            Loaded {activities.length} activities{loaded?'  ':'... '}
-            <div className={"LoadingBar "+(loaded?"Loaded":'Loading')}><span>{loaded?"👍":"🤞"}</span></div>
-          </div>
+      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen}/>
 
-          <ActivityDisplay activities={activities} setActivities={setActivities} metric={metric} />
-        </main>
-      }
 
+      <Footer />
     </div>
   );
 }
 
 export default App;
-// http://trails.ninja/
-// goes to > https://www.strava.com/oauth/authorize?client_id=1495&response_type=code&redirect_uri=http://trails.ninja&approval_prompt=auto&scope=read_all,activity:read_all
-// heads back to http://www.trails.ninja/?state=&code=add8f4a28b3d2b407912e178fc950dfeb56f0500&scope=read,activity:read_all,read_all
-
-// https://www.bifurkate.com/
-// goes to > https://www.strava.com/oauth/authorize?client_id=38178&response_type=code&redirect_uri=https://www.bifurkate.com/callback&approval_prompt=force&scope=read,profile:read_all,activity:read,activity:read_all
-// then to > https://www.bifurkate.com/callback/?state=&code=b88a98b03509bc858c96f327dee77233c80a8afc&scope=read,activity:read,activity:read_all,profile:read_all
