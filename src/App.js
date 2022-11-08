@@ -51,6 +51,14 @@ function App() {
   // console.log(temp_token)
 
   useEffect(()=>{
+    let existing_token_expiry = localStorage.getItem('TokenExpires')
+
+    if (existing_token_expiry * 1000 > new Date().getTime()) {
+      console.log('token still valid')
+
+      setAthlete(JSON.parse(localStorage.getItem('Athlete')))
+    }
+
     oAuthService.exchange({
       client_id : '70098',
       client_secret : process.env.REACT_APP_CLIENT_SECRET,
@@ -63,7 +71,7 @@ function App() {
       setAthlete(result.athlete)
       localStorage.setItem('TokenExpires', result.expires_at);
 
-      localStorage.setItem('Athlete', athlete);
+      localStorage.setItem('Athlete', JSON.stringify(result.athlete));
       stravaService.allActivities({
         access_token : result.access_token,
         activities : activities , setActivities : setActivities
