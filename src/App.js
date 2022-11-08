@@ -28,27 +28,44 @@ function App() {
   const [metric, setMetric] = useState(true)
 
   const [scope, setScope] = useState(null)
+  const [tempToken, setTempToken] = useState(null)
 
-  var queryString = window.location.search;
+  useEffect(() => {
+    var queryString = window.location.search;
 
-  console.log('queryString:', queryString)
-  const urlParams = new URLSearchParams(queryString);
-  console.log(scope, urlParams.get('scope'))
-  // const scope = urlParams.get('scope')
-  if (urlParams.get('scope') === 'read,activity:read_all,read_all' && scope === null) {
-    console.log('scope:', scope)
-    setScope('read,activity:read_all,read_all')
-    console.log('scope:', scope)
-  } else {
-    console.log('')
-  }
-  var temp_token = urlParams.get('code');
+    const urlParams = new URLSearchParams(queryString);
+    console.log(scope, urlParams.get('scope'))
+
+    if (urlParams.get('scope') === 'read,activity:read_all,read_all' && scope === null) {
+      console.log('scope:', scope)
+      setScope('read,activity:read_all,read_all')
+    } else {
+      console.log('')
+    }
+    // var temp_token = urlParams.get('code');
+    setTempToken(urlParams.get('code'))
+  }, []) // empty array dependency only runs once
+
+
 
   useEffect(()=>{
-    console.log('athlete changed', athlete)
+    if (athlete) {
+      console.log('athlete changed', athlete)
+      stravaService.allActivities({
+        access_token : localStorage.getItem('AccessToken'),
+        activities : activities , setActivities : setActivities
+      }).then(() => {
+        setLoaded(true)
+      })
+    }
+
   }, [athlete])
 
   // console.log(temp_token)
+
+  const doActivityOperation = () => {
+
+  }
 
   useEffect(()=>{
     let existing_token_expiry = localStorage.getItem('TokenExpires')
@@ -57,28 +74,42 @@ function App() {
       console.log('token still valid')
 
       setAthlete(JSON.parse(localStorage.getItem('Athlete')))
+
+      // stravaService.allActivities({
+      //   access_token : localStorage.getItem('AccessToken'),
+      //   activities : activities , setActivities : setActivities
+      // }).then(() => {
+      //   setLoaded(true)
+      // })
+
+      return
+
+    } else {
+      console.log('token not still valid')
     }
 
     oAuthService.exchange({
       client_id : '70098',
       client_secret : process.env.REACT_APP_CLIENT_SECRET,
-      code : temp_token,
+      code : tempToken,
       grant_type : 'authorization_code'
     }).then(result => {
       console.log(result)
       console.log(new Date().getTime() > result.expires_at * 1000  ? 'expired' : 'valid')
 
-      setAthlete(result.athlete)
-      localStorage.setItem('TokenExpires', result.expires_at);
 
-      localStorage.setItem('Athlete', JSON.stringify(result.athlete));
-      stravaService.allActivities({
-        access_token : result.access_token,
-        activities : activities , setActivities : setActivities
-      }).then(res => {
-        console.log(res)
-        setLoaded(true)
-      })
+      localStorage.setItem('TokenExpires', result.expires_at)
+      localStorage.setItem('AccessToken', result.access_token)
+      localStorage.setItem('Athlete', JSON.stringify(result.athlete))
+      setAthlete(result.athlete)
+
+      // stravaService.allActivities({
+      //   access_token : result.access_token,
+      //   activities : activities , setActivities : setActivities
+      // }).then(res => {
+      //   console.log(res)
+      //   setLoaded(true)
+      // })
     })
   }, [scope])
 
@@ -87,7 +118,8 @@ function App() {
   return (
     <div className="App">
     <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
-      <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
+      <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
+      athlete={athlete}/>
       <header className="App-header">
 
       </header>
@@ -99,7 +131,7 @@ function App() {
             <Route path="/" element={<Intro />} />
 
             <Route path="/approval" element={<div>
-              redirect
+              redirect –
               {scope !== 'read,activity:read_all,read_all' ? <PermissionFailure /> : ''}
               {athlete !== null ? athlete.firstname : 'athlete null'}
               {athlete !== null &&
@@ -109,6 +141,7 @@ function App() {
               </div>} />
           </Routes>
         </BrowserRouter>
+        {activities.length} activities loaded
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
         </button>
