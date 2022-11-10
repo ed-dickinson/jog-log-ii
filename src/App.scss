@@ -168,7 +168,21 @@ nav {
 
   .UserConnection {
     font-weight: bold;
-    color: $not-strava-blue;
+    .Connected {
+      color: $not-strava-blue;
+    }
+    .Unconnected {
+      color: darkgrey;
+    }
+
+  }
+  .ReconnectButton {
+    border-color: $strava-orange;
+    border-radius: 2px;
+    border-width: 1px;
+    background-color: $strava-orange;
+    box-shadow: 0px 0px 1px grey;
+    color: white;
   }
 }
 
@@ -277,4 +291,15 @@ table {
       margin: 0; padding: 0;
     }
   }
+  .ElevationIcon {
+    border-right: 1em solid black;
+    border-top-color: transparent;
+    border-top-style: solid;
+    border-top-width: 100%;
+    display: inline-block;
+  }
+}
+
+.Intro {
+  display: none;
 }

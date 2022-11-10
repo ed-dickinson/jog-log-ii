@@ -26,6 +26,7 @@ import PermissionFailure from './components/PermissionFailure'
 console.log('\\/ \\/ \\/ APP REFRESH \\/ \\/ \\/')
 
 function App() {
+  console.log('App loaded')
   const [user, setUser] = useState(null)
 
   const [writerOpen, setWriterOpen] = useState(false)
@@ -38,6 +39,11 @@ function App() {
 
   const [scope, setScope] = useState(null)
   const [tempToken, setTempToken] = useState(null)
+
+  const [userState, setUserState] = useState({token_valid : null})
+
+  // DEBUGS
+  const [tokenExpiryDEBUG, setTokenExpiryDEBUG] = useState(null)
 
   // handles redirect
   useEffect(() => {
@@ -61,7 +67,9 @@ function App() {
 
   // handles athlete change
   useEffect(()=>{
+    console.log('athlete changed', athlete)
 
+    // this DOUBLE TRIGGERS on athlete change becuase it retrieves it from token and then sets it by strava
     if (athlete) {
       accountService.linkStrava({
         id : athlete.id,
@@ -77,24 +85,24 @@ function App() {
           setUser(response.data.user)
         }
       })
-      console.log('athlete changed', athlete)
+
       // stravaService.allActivities({
       //   access_token : localStorage.getItem('AccessToken'),
       //   activities : activities , setActivities : setActivities
       // }).then(() => {
       //   setLoaded(true)
       // })
-      // stravaService.activities({
-      //   access_token : localStorage.getItem('AccessToken'),
-      //   activities : activities , setActivities : setActivities
-      // }).then(res => {
-      //   console.log(res)
-      //   setActivities(res)
-      //   setLoaded(true)
-      // })
+      stravaService.activities({
+        access_token : localStorage.getItem('AccessToken'),
+        activities : activities , setActivities : setActivities
+      }).then(res => {
+        console.log(res)
+        setActivities(res)
+        setLoaded(true)
+      })
     }
 
-  // }, []) // just on mount
+
   }, [athlete])
 
   // console.log(temp_token)
@@ -107,23 +115,29 @@ function App() {
   useEffect(()=>{
     let existing_token_expiry = localStorage.getItem('TokenExpires')
 
+    setTokenExpiryDEBUG(existing_token_expiry)
+
+    let stored_athlete = localStorage.getItem('Athlete')
+    if (stored_athlete !== null) {
+      setAthlete(JSON.parse(localStorage.getItem('Athlete')))
+      console.log('athlete set by existing')
+    }
+
     // if token still valid then retrive athlete from localStorage
     if (existing_token_expiry * 1000 > new Date().getTime()) {
+      // stops double triggering
+      if (athlete) return
       console.log('token still valid')
+      setUserState({...userState, token_valid : true})
 
-      setAthlete(JSON.parse(localStorage.getItem('Athlete')))
 
-      // stravaService.allActivities({
-      //   access_token : localStorage.getItem('AccessToken'),
-      //   activities : activities , setActivities : setActivities
-      // }).then(() => {
-      //   setLoaded(true)
-      // })
+
 
       return
 
     } else {
       console.log('token not still valid')
+      setUserState({...userState, token_valid : false})
       // ask to reaffirm with strava
     }
 
@@ -141,7 +155,10 @@ function App() {
       localStorage.setItem('TokenExpires', result.expires_at)
       localStorage.setItem('AccessToken', result.access_token)
       localStorage.setItem('Athlete', JSON.stringify(result.athlete))
+
+      // console.log(result.athlete.id)
       setAthlete(result.athlete)
+      console.log('athlete set by strava')
 
       // stravaService.allActivities({
       //   access_token : result.access_token,
@@ -160,13 +177,19 @@ function App() {
 
       <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
       <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
-      athlete={athlete} user={user}/>
+      athlete={athlete} user={user} userState={userState}/>
       <header className="App-header">
-        {user && user.no}
+
       </header>
 
 
       <main>
+
+      userID: {user && user.no} — {user ? 'user connected' : 'user not connected'}
+      <br />
+      time: {new Date().toLocaleString()} —
+      token expires: {new Date(tokenExpiryDEBUG*1000).toLocaleString()}
+
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Intro />} />

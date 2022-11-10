@@ -2,20 +2,22 @@ import React from 'react'
 
 // import { UserContext } from '../App.js'
 
-const Profile = ({profileOpen, setProfileOpen, athlete, user}) => {
+const Profile = ({profileOpen, setProfileOpen, athlete, user, userState}) => {
 
   // const user = useContext(UserContext)
 
   return (
     <div className="ProfileContainer">
       <div className={"Profile" + (profileOpen ? ' show' : ' hide')}>
-        <div className="PageTitle">Profile:</div>
-        <div className="UserConnection"><img src={user ? 'assets/123-connection.png': 'assets/122-noconnection.png'} /> {user ?
-          'user connected' : 'user unconnected'}</div>
+
+        <div className="UserConnection">
+          <span className={user ? "Connected" : "Unconnected"}>{user ? 'user connected' : 'user unconnected'}</span> <img src={user ? 'assets/123-connection.png': 'assets/122-noconnection.png'} />
+        </div>
         {athlete
           ?
           <div>
             <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID">#{athlete.id}</span>
+            <div>{userState.token_valid === false && <div>Strava Token Expired<br /><button className="ReconnectButton">Reconnect to Refresh Runs</button></div>}</div>
           </div>
           :
           <div>
