@@ -5,6 +5,7 @@ import React from 'react'
 const Intro = () => {
   return (
     <div>
+    <b>INDEX</b>
       <p>
         Hi there, and welcome to Jog-Log!
       </p>

@@ -6,8 +6,11 @@ import './App.scss';
 
 import oAuthService from './services/oauth'
 import stravaService from './services/strava'
+import accountService from './services/account'
 
 // import Router from './Router'
+
+
 
 import Nav from './components/Nav'
 import Intro from './components/Intro'
@@ -15,9 +18,15 @@ import Footer from './components/Footer'
 import Writer from './components/Writer'
 import Profile from './components/Profile'
 import StravaAthlete from './components/StravaAthlete'
+import StravaActivities from './components/StravaActivities'
 import PermissionFailure from './components/PermissionFailure'
 
+// const UserContext = createContext()
+
+console.log('\\/ \\/ \\/ APP REFRESH \\/ \\/ \\/')
+
 function App() {
+  const [user, setUser] = useState(null)
 
   const [writerOpen, setWriterOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -30,8 +39,11 @@ function App() {
   const [scope, setScope] = useState(null)
   const [tempToken, setTempToken] = useState(null)
 
+  // handles redirect
   useEffect(() => {
     var queryString = window.location.search;
+
+    if (queryString === '') return
 
     const urlParams = new URLSearchParams(queryString);
     console.log(scope, urlParams.get('scope'))
@@ -39,26 +51,50 @@ function App() {
     if (urlParams.get('scope') === 'read,activity:read_all,read_all' && scope === null) {
       console.log('scope:', scope)
       setScope('read,activity:read_all,read_all')
+      setTempToken(urlParams.get('code'))
     } else {
-      console.log('')
+      return
     }
-    // var temp_token = urlParams.get('code');
-    setTempToken(urlParams.get('code'))
+
   }, []) // empty array dependency only runs once
 
 
-
+  // handles athlete change
   useEffect(()=>{
+
     if (athlete) {
-      console.log('athlete changed', athlete)
-      stravaService.allActivities({
-        access_token : localStorage.getItem('AccessToken'),
-        activities : activities , setActivities : setActivities
-      }).then(() => {
-        setLoaded(true)
+      accountService.linkStrava({
+        id : athlete.id,
+        password : process.env.REACT_APP_STRAVA_SECRET
+      }).then(response => {
+        console.log('res',response)
+        if (response.status === 204) {
+          accountService.linkNewStrava({
+            id : athlete.id,
+            password : process.env.REACT_APP_STRAVA_SECRET
+          })
+        } else {
+          setUser(response.data.user)
+        }
       })
+      console.log('athlete changed', athlete)
+      // stravaService.allActivities({
+      //   access_token : localStorage.getItem('AccessToken'),
+      //   activities : activities , setActivities : setActivities
+      // }).then(() => {
+      //   setLoaded(true)
+      // })
+      // stravaService.activities({
+      //   access_token : localStorage.getItem('AccessToken'),
+      //   activities : activities , setActivities : setActivities
+      // }).then(res => {
+      //   console.log(res)
+      //   setActivities(res)
+      //   setLoaded(true)
+      // })
     }
 
+  // }, []) // just on mount
   }, [athlete])
 
   // console.log(temp_token)
@@ -67,9 +103,11 @@ function App() {
 
   }
 
+  // handles redirect (scope change)
   useEffect(()=>{
     let existing_token_expiry = localStorage.getItem('TokenExpires')
 
+    // if token still valid then retrive athlete from localStorage
     if (existing_token_expiry * 1000 > new Date().getTime()) {
       console.log('token still valid')
 
@@ -86,8 +124,10 @@ function App() {
 
     } else {
       console.log('token not still valid')
+      // ask to reaffirm with strava
     }
 
+    // exchange with strava
     oAuthService.exchange({
       client_id : '70098',
       client_secret : process.env.REACT_APP_CLIENT_SECRET,
@@ -117,11 +157,12 @@ function App() {
 
   return (
     <div className="App">
-    <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
-      <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
-      athlete={athlete}/>
-      <header className="App-header">
 
+      <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
+      <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
+      athlete={athlete} user={user}/>
+      <header className="App-header">
+        {user && user.no}
       </header>
 
 
@@ -131,7 +172,7 @@ function App() {
             <Route path="/" element={<Intro />} />
 
             <Route path="/approval" element={<div>
-              redirect –
+              <b>redirect –</b>
               {scope !== 'read,activity:read_all,read_all' ? <PermissionFailure /> : ''}
               {athlete !== null ? athlete.firstname : 'athlete null'}
               {athlete !== null &&
@@ -142,6 +183,7 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities loaded
+        <StravaActivities activities={activities} />
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
         </button>
