@@ -2,7 +2,7 @@ import React from 'react'
 
 // {athlete.firstname} {athlete.lastname}
 
-
+const current_base_url = window.location.origin
 
 const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
 
@@ -22,7 +22,7 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
         <img src="assets/194-head.png" />
       </button>
 
-      <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri=http://localhost:3000/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
+      <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
         <img src="/strava-connect-button@2x.png" />
       </button>
 
