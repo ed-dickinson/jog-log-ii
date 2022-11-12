@@ -168,13 +168,25 @@ nav {
 
   .UserConnection {
     font-weight: bold;
+    position: relative;
+    font-size: 0.9em;
+
     .Connected {
       color: $not-strava-blue;
     }
     .Unconnected {
       color: darkgrey;
     }
-
+    span {
+      position: relative;
+      top: -0.85em;
+    }
+    span::after {
+      content: 'to database';
+      position: absolute;
+      top: 80%;
+      right: 0;
+    }
   }
   .ReconnectButton {
     border-color: $strava-orange;

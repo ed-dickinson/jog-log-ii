@@ -8,7 +8,7 @@ const StravaActivities = ({activities}) => {
       <table>
         <tbody>
           {activities.map(activity =>
-            <tr>
+            <tr key={activity.id}>
             <td>{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" />
               :activity.type==='Ride'?<img src="/assets/Treasures49-cyclist2.png" />
               :activity.type==='Swim'?<img src="/assets/Treasures53-swimmer.png" />

@@ -4,8 +4,6 @@ import React from 'react'
 
 const current_base_url = window.location.origin
 
-console.log(current_base_url)
-
 const Profile = ({profileOpen, setProfileOpen, athlete, user, state}) => {
 
   // const user = useContext(UserContext)

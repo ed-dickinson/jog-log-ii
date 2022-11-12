@@ -39,17 +39,42 @@ function App() {
 
   const [scope, setScope] = useState(null)
   const [tempToken, setTempToken] = useState(null)
+  const [token, setToken] = useState({token : null, valid : null})
 
   const [state, setState] = useState({token_valid : null})
 
+  const freshFromRedirect = useRef(true)
+
   // DEBUGS
   const [tokenExpiryDEBUG, setTokenExpiryDEBUG] = useState(null)
+
+  // check for athlete and tokens
+  useEffect(()=>{
+    let debug = ''
+    if (localStorage.getItem('Athlete')) {
+      setAthlete(JSON.parse(localStorage.getItem('Athlete')))
+      debug += 'athlete, '
+    }
+    let stored_access_token = localStorage.getItem('AccessToken')
+    if (stored_access_token) {
+      let token_expiry = localStorage.getItem('TokenExpires')
+
+      if (token_expiry * 1000 > new Date().getTime()) {
+        setToken({token : stored_access_token, valid : true})
+        debug += 'valid token, '
+      } else {
+        setToken({token : stored_access_token, valid : false})
+        debug += 'expired token, '
+      }
+      debug += 'retrieved from localStorage'
+    }
+    console.log(debug)
+  },[])
 
   // handles redirect
   useEffect(() => {
     const queryString = window.location.search;
     const route = window.location.pathname.slice(1)
-    console.log(route)
 
     // cancels if not a redirect
     if (queryString === '') return
@@ -62,15 +87,27 @@ function App() {
       // then login to mongodb
       // a;so do this if athlete is found in storage
 
+      // only do exchange if token needs refreshing
+      // although this would be handy to change to recognising only doing it on the first redirect not on app changes
+      console.log('fresh off redirect?', freshFromRedirect.current)
+      // if (!freshFromRedirect.current) {
+      //   return
+      // } else {
+      //   freshFromRedirect.current = false
+      // }
+      console.log('valid token?', token.valid)
+      // why is this not working??????????
+      if (token.valid !== false) {
+        console.log('token valid - no auth')
+        return
+      }
 
-      console.log('trigger successful strava scope redirect')
 
-      let temp_token = urlParams.get('code')
-
+      console.log('token',token)
       oAuthService.exchange({
-        code : temp_token
+        code : urlParams.get('code')
       }).then(result => {
-        console.log(result)
+        console.log(result, 'auth exchanged')
 
         localStorage.setItem('TokenExpires', result.expires_at)
         localStorage.setItem('AccessToken', result.access_token)
@@ -80,7 +117,6 @@ function App() {
         console.log('athlete set by strava')
       })
 
-      // all this goddamn double reloading is happening because the props are changing when i'm doing all these useStates
       // setScope('read,activity:read_all,read_all')
       // setTempToken(urlParams.get('code'))
     } else {
@@ -92,28 +128,83 @@ function App() {
 
   }, []) // empty array dependency only runs once
 
+  // // check if token valid
+  // useEffect(()=>{
+  //   let token_expiry = localStorage.getItem('TokenExpires')
+  //
+  //   let token_still_valid = (token_expiry * 1000 > new Date().getTime())
+  //
+  //   if (token_still_valid) {
+  //     setState({...state, token_valid : true})
+  //   } else {
+  //     setState({...state, token_valid : false})
+  //   }
+  // },[])
+
+  // use effect for fetching activities
   useEffect(()=>{
-    console.log('athlete effect triggered')
-    if (athlete) {
-      let token_expiry = localStorage.getItem('TokenExpires')
+    if (activities.length > 0) {return}
 
-      setTokenExpiryDEBUG(token_expiry)
-
-      let token_still_valid = (token_expiry * 1000 > new Date().getTime())
-
-      if (token_still_valid) {
-        // stops double triggering
-      
-        console.log('token still valid - fetch strava')
-        setState({...state, token_valid : true})
-
-      } else {
-        console.log('token not still valid - ask for reconnection')
-        setState({...state, token_valid : false})
-        // ask to reaffirm with strava
-      }
+    if (athlete && token.valid) {
+      stravaService.activities({
+        access_token : token.token,
+        activities : activities ,
+        setActivities : setActivities
+      }).then(res => {
+        console.log('fetched runs:', res)
+        setActivities(res)
+        setLoaded(true)
+      })
     }
-  },[athlete])
+  },[athlete, token])
+
+  // logs user into database
+  useEffect(()=>{
+
+    if (athlete) {
+      accountService.linkStrava({
+        id : athlete.id,
+        password : process.env.REACT_APP_STRAVA_SECRET
+      }).then(response => {
+        console.log('res',response)
+        if (response.status === 204) {
+          accountService.linkNewStrava({
+            id : athlete.id,
+            password : process.env.REACT_APP_STRAVA_SECRET
+          })
+        } else {
+          setUser(response.data.user)
+        }
+      })
+    }
+  },[token])
+
+  // useEffect(()=>{
+  //
+  // },[])
+
+  // useEffect(()=>{
+  //   console.log('athlete effect triggered')
+  //   if (athlete) {
+  //     let token_expiry = localStorage.getItem('TokenExpires')
+  //
+  //     setTokenExpiryDEBUG(token_expiry)
+  //
+  //     let token_still_valid = (token_expiry * 1000 > new Date().getTime())
+  //
+  //     if (token_still_valid) {
+  //       // stops double triggering
+  //
+  //       console.log('token still valid - fetch strava')
+  //       setState({...state, token_valid : true})
+  //
+  //     } else {
+  //       console.log('token not still valid - ask for reconnection')
+  //       setState({...state, token_valid : false})
+  //       // ask to reaffirm with strava
+  //     }
+  //   }
+  // },[athlete])
 
 
   // handles athlete change
@@ -234,7 +325,7 @@ function App() {
       athlete: {athlete && '#' + athlete.id + ':' } {athlete ? athlete.name : 'no athlete'}
       <br />
       time: {new Date().toLocaleString()} —
-      token expires: {new Date(tokenExpiryDEBUG*1000).toLocaleString()}
+      token valid? <strong>{token.valid === 'null' ? 'null' : token.valid ? 'true' : 'false'}</strong>, {token.valid ? 'expires' : 'expired'}: {new Date(localStorage.getItem('TokenExpires')*1000).toLocaleString()}
 
         <BrowserRouter>
           <Routes>
