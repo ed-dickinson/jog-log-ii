@@ -48,6 +48,9 @@ function App() {
   // DEBUGS
   const [tokenExpiryDEBUG, setTokenExpiryDEBUG] = useState(null)
 
+
+  // token validation check doesn't happen before athlete/fetch
+
   // check for athlete and tokens
   useEffect(()=>{
     let debug = ''
@@ -113,6 +116,7 @@ function App() {
         localStorage.setItem('AccessToken', result.access_token)
         localStorage.setItem('Athlete', JSON.stringify(result.athlete))
 
+        setToken({token: result.access_token, valid: true})
         setAthlete(result.athlete)
         console.log('athlete set by strava')
       })
@@ -161,7 +165,8 @@ function App() {
   // logs user into database
   useEffect(()=>{
 
-    if (athlete) {
+    // is user not logged in but athlete is
+    if (athlete && !user) {
       accountService.linkStrava({
         id : athlete.id,
         password : process.env.REACT_APP_STRAVA_SECRET
@@ -248,7 +253,7 @@ function App() {
   // }, [athlete])
 
 
-  const firstUpdate = useRef(true)
+  // const firstUpdate = useRef(true)
   // // handles redirect (scope change)
   // useEffect(()=>{
   //
@@ -313,7 +318,7 @@ function App() {
 
       <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
       <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
-      athlete={athlete} user={user} state={state}/>
+      athlete={athlete} user={user} token={token}/>
       <header className="App-header">
 
       </header>

@@ -24,6 +24,7 @@ const StravaActivities = ({activities}) => {
               <td>{(activity.distance / 1609.344).toFixed(1)}mi</td>
               <td><span className="ElevationIcon" style={{borderTopWidth:(activity.total_elevation_gain /activity.distance * 20)+'em'}}></span></td>
               <td>{(activity.total_elevation_gain).toFixed(0)}m</td>
+              <td className="ButtonCell"><button className="ActivityLogButton">LOG</button></td>
             </tr>
           )}
         </tbody>

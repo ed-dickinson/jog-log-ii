@@ -4,7 +4,7 @@ import React from 'react'
 
 const current_base_url = window.location.origin
 
-const Profile = ({profileOpen, setProfileOpen, athlete, user, state}) => {
+const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
 
   // const user = useContext(UserContext)
 
@@ -19,7 +19,11 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, state}) => {
           ?
           <div>
             <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID">#{athlete.id}</span>
-            <div>{state.token_valid === false && <div>Strava Token Expired<br /><button className="ReconnectButton">Reconnect to Refresh Runs</button></div>}</div>
+            <div>{token.valid === false && <div>Strava Token Expired<br />
+              <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
+                <img src="assets/strava-reconnect3-button.png" />
+              </button>
+            </div>}</div>
           </div>
           :
           <div>

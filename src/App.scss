@@ -310,6 +310,23 @@ table {
     border-top-width: 100%;
     display: inline-block;
   }
+
+
+}
+
+.ButtonCell {
+  line-height: 0;
+}
+.ActivityLogButton {
+  background-image: url('../public/assets/95-justhand.png');
+  border: 0;
+  background-color: transparent;
+  height: 13px;
+  width: 20px;
+  font-size: 0;
+  &:hover {
+    filter: contrast(0.5);
+  }
 }
 
 // JUST FOR DEBUG
