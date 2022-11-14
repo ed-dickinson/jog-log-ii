@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 // import { UserContext } from '../App.js'
 
@@ -7,6 +7,33 @@ const current_base_url = window.location.origin
 const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
 
   // const user = useContext(UserContext)
+
+  const [signingUp, setSigningUp] = useState(false)
+  const [message, setMessage] = useState(null)
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConf, setPasswordConf] = useState('')
+
+
+  const signUp = () => {
+    console.log(signingUp)
+    if (!signingUp) {
+      setSigningUp(true)
+    } else {
+      if (username.length < 2) {
+        console.log(username.length)
+        setMessage('Username too short.')
+        return
+      } else if (password.length < 5) {
+        setMessage('Password too short.')
+        return
+      } else if (password !== passwordConf) {
+        setMessage("Passwords don't match.")
+        return
+      }
+    }
+  }
 
   return (
     <div className="ProfileContainer">
@@ -31,13 +58,18 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
             <div>Please log in, create a profile, or connect with Strava.</div>
             <div>
               <label>Username/email: </label>
-              <input></input>
+              <input onChange={({target}) => setUsername(target.value)}></input>
             </div>
             <div>
               <label>Password: </label>
-              <input type="password"></input>
+              <input type="password" onChange={({target}) => setPassword(target.value)}></input>
             </div>
-            <button>Log in</button><button>Sign Up</button><br />
+            <div style={!signingUp ? {display: 'none'} : {display: 'block'}}>
+              <label>Confirm password: </label>
+              <input type="password" onChange={({target}) => setPasswordConf(target.value)}></input>
+            </div>
+            <span>{message} </span>
+            <button onClick={()=>{console.log('log in')}}>Log in</button><button onClick={()=>{signUp()}}>Sign Up</button><br />
             <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
               <img src="assets/strava-connect-button.png" alt="Connect with Strava" />
             </button>

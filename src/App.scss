@@ -245,6 +245,7 @@ aside.Writer {
     left: 112px;
     bottom: 17px;
     border: 1px solid black;
+    border-radius: 3px;
   }
 
   transition: transform 0.5s;
@@ -333,4 +334,7 @@ table {
 // JUST FOR DEBUG
 .Intro p {
   display: none;
+}
+.Intro::after {
+  content: ' — placeholder 1st timer text';
 }

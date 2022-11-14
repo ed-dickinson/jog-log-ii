@@ -34,6 +34,7 @@ function App() {
 
   const [athlete, setAthlete] = useState(null)
   const [activities, setActivities] = useState([])
+  const [stravaActivity, setStravaActivity] = useState(null)
   // const [loaded, setLoaded] = useState(false)
   // const [metric, setMetric] = useState(true)
 
@@ -103,11 +104,17 @@ function App() {
         console.log('token valid - no auth')
         return
       }
-      if (token.valid === null) {
-        // DO SOMETHING HERE TO STOP NON-TRIGGERING ON non-refresh REDIRECT
-        console.log('token is null')
+      // if (token.valid === null) {
+      //   // DO SOMETHING HERE TO STOP NON-TRIGGERING ON non-refresh REDIRECT
+      //   console.log('token is null')
+      //   // return
+      // }
+      if (localStorage.getItem('AccessToken') && localStorage.getItem('TokenExpires') * 1000 > new Date().getTime()) {
+        console.log('direct check token valid')
         return
       }
+
+      console.log('oauth triggered — token val:', token.valid, 'url', urlParams.get('code'))
 
       oAuthService.exchange({
         code : urlParams.get('code')
@@ -121,7 +128,9 @@ function App() {
         setToken({token: result.access_token, valid: true})
         setAthlete(result.athlete)
         console.log('athlete set by strava')
-      }).catch(err=>console.log('bad auth request'))
+      }).catch(err=>{
+        console.log('bad auth request')
+      })
 
       // setScope('read,activity:read_all,read_all')
       // setTempToken(urlParams.get('code'))
@@ -161,6 +170,7 @@ function App() {
         console.log('fetched runs:', res)
         setActivities(res)
         // setLoaded(true)
+        setStravaActivity(res[0])
       })
     }
   },[token])
@@ -323,7 +333,8 @@ function App() {
   return (
     <div className="App">
 
-      <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}/>
+      <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}
+      />
       <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
       athlete={athlete} user={user} token={token}/>
       <header className="App-header">
@@ -360,7 +371,7 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities loaded
-        <StravaActivities activities={activities} />
+        <StravaActivities activities={activities} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen}/>
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
         </button>
@@ -368,7 +379,7 @@ function App() {
 
 
 
-      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen}/>
+      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} stravaActivity={stravaActivity}/>
 
 
       <Footer />

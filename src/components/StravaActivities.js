@@ -1,6 +1,6 @@
 import React from 'react'
 
-const StravaActivities = ({activities}) => {
+const StravaActivities = ({activities, setStravaActivity, setWriterOpen}) => {
   return (
 
     <div className="StravaActivities">
@@ -21,7 +21,14 @@ const StravaActivities = ({activities}) => {
               :activity.type==='Walk'?<img src="/assets/Treasures49-walker.png" alt="Walk"/>
               :'🕴️'}</td>
               <td>{activity.name}</td>
-              <td className="ButtonCell"><button className="ActivityLogButton">LOG</button></td>
+              <td className="ButtonCell">
+                <button
+                  className="ActivityLogButton"
+                  onClick={()=>{
+                    setStravaActivity(activity)
+                    setWriterOpen(true)
+                  }}>LOG</button>
+              </td>
               <td style={{textAlign: 'right'}}>{(activity.distance / 1609.344).toFixed(1)}mi</td>
               <td style={{textAlign: 'right'}}>
                 <span className="ElevationIcon" style={(activity.total_elevation_gain /activity.distance * 30) < 1
