@@ -76,6 +76,7 @@ function App() {
 
   // handles redirect
   useEffect(() => {
+    console.log('useEffect: scope check & exchange')
     const queryString = window.location.search;
     const route = window.location.pathname.slice(1)
 
@@ -93,20 +94,26 @@ function App() {
       // only do exchange if token needs refreshing
       // although this would be handy to change to recognising only doing it on the first redirect not on app changes
       console.log('fresh off redirect?', freshFromRedirect.current)
-      // if (!freshFromRedirect.current) {
-      //   return
-      // } else {
-      //   freshFromRedirect.current = false
-      // }
+      if (!freshFromRedirect.current) {
+        // return
+      } else {
+        freshFromRedirect.current = false
+      }
       console.log('valid token?', token.valid)
       // why is this not working??????????
-      if (token.valid !== false) {
+      // if (token.valid !== false) {
+      if (token.valid === true) {
         console.log('token valid - no auth')
+        return
+      }
+      if (token.valid === null) {
+        // DO SOMETHING HERE TO STOP NON-TRIGGERING ON non-refresh REDIRECT
+        console.log('token is null')
         return
       }
 
 
-      console.log('token',token)
+      console.log('oauth -> token',token)
       oAuthService.exchange({
         code : urlParams.get('code')
       }).then(result => {
@@ -119,7 +126,7 @@ function App() {
         setToken({token: result.access_token, valid: true})
         setAthlete(result.athlete)
         console.log('athlete set by strava')
-      })
+      }).catch(err=>console.log('bad auth request'))
 
       // setScope('read,activity:read_all,read_all')
       // setTempToken(urlParams.get('code'))
@@ -130,7 +137,7 @@ function App() {
       return
     }
 
-  }, []) // empty array dependency only runs once
+  }, [token]) // empty array dependency only runs once
 
   // // check if token valid
   // useEffect(()=>{
@@ -147,6 +154,7 @@ function App() {
 
   // use effect for fetching activities
   useEffect(()=>{
+    console.log('useEffect: activities', 'token valid:', token.valid)
     if (activities.length > 0) {return}
 
     if (athlete && token.valid) {
@@ -160,10 +168,11 @@ function App() {
         setLoaded(true)
       })
     }
-  },[athlete, token])
+  },[token])
 
   // logs user into database
   useEffect(()=>{
+    console.log('useEffect: log user into DB')
 
     // is user not logged in but athlete is
     if (athlete && !user) {
@@ -171,7 +180,7 @@ function App() {
         id : athlete.id,
         password : process.env.REACT_APP_STRAVA_SECRET
       }).then(response => {
-        console.log('res',response)
+        console.log('login response',response)
         if (response.status === 204) {
           accountService.linkNewStrava({
             id : athlete.id,
@@ -182,7 +191,7 @@ function App() {
         }
       })
     }
-  },[token])
+  },[athlete])
 
   // useEffect(()=>{
   //
@@ -331,6 +340,11 @@ function App() {
       <br />
       time: {new Date().toLocaleString()} —
       token valid? <strong>{token.valid === 'null' ? 'null' : token.valid ? 'true' : 'false'}</strong>, {token.valid ? 'expires' : 'expired'}: {new Date(localStorage.getItem('TokenExpires')*1000).toLocaleString()}
+      <button onClick={()=>{
+        setToken({token: 'fake', valid: false})
+        localStorage.setItem('TokenExpires', new Date(0).getTime())
+        localStorage.setItem('AccessToken', 'fake')
+      }}>Invalidate Token</button>
 
         <BrowserRouter>
           <Routes>

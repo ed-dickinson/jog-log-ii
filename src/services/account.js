@@ -48,7 +48,7 @@ const linkStrava = async params => {
 
   const response = await axios.post(baseURL + urlExtension + '/strava-login', params)
 
-  console.log('response:',response)
+  // console.log('response:',response)
   // console.log(response, response.status, response.message)
 
   return response

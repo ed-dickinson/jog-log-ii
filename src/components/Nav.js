@@ -10,7 +10,7 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
 
   return (
     <nav>
-      <img className="AppleLogo" src="/running-apple.png" />
+      <img className="AppleLogo" src="/running-apple.png" onClick={()=>window.location.href = window.location.origin}/>
 
       <img src="/san-fran-logo.png" style={{filter: 'drop-shadow(0px 0px 0.5px black)'}} />
 
