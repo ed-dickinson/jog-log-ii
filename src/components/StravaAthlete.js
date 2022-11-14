@@ -12,7 +12,7 @@ const StravaAthlete = ({athlete}) => {
       <br />
       since: {athlete.created_at}
       <br />
-      ID: {athlete.id} <img src={athlete.profile} /> <img src={athlete.profile_medium} />
+      ID: {athlete.id} <img src={athlete.profile} alt="Athlete, provided by Strava." /> <img src={athlete.profile_medium} alt="Small Athlete, provided by Strava." />
 
     </div>
   )

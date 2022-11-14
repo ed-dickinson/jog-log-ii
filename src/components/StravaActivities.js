@@ -9,16 +9,16 @@ const StravaActivities = ({activities}) => {
         <tbody>
           {activities.map(activity =>
             <tr key={activity.id}>
-            <td>{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" />
-              :activity.type==='Ride'?<img src="/assets/Treasures49-cyclist2.png" />
-              :activity.type==='Swim'?<img src="/assets/Treasures53-swimmer.png" />
+            <td>{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" alt="Run"/>
+              :activity.type==='Ride'?<img src="/assets/Treasures49-cyclist2.png" alt="Ride"/>
+              :activity.type==='Swim'?<img src="/assets/Treasures53-swimmer.png" alt="Swim"/>
               :activity.type==='Hike'?'🥾'
               :activity.type==='InlineSkate'?'🛼'
               :activity.type==='RockClimb'?'🧗'
               :activity.type==='Canoe'?'🛶'
               :activity.type==='Kayak'?'🛶'
               :activity.type==='Row'?'🚣'
-              :activity.type==='Walk'?<img src="/assets/Treasures49-walker.png" />
+              :activity.type==='Walk'?<img src="/assets/Treasures49-walker.png" alt="Walk"/>
               :'🕴️'}</td>
               <td>{activity.name}</td>
               <td className="ButtonCell"><button className="ActivityLogButton">LOG</button></td>
@@ -29,7 +29,6 @@ const StravaActivities = ({activities}) => {
                 }
                   :{borderTopWidth:'1em',borderRightWidth:1/(activity.total_elevation_gain /activity.distance * 30)+'em'}}></span>
               </td>
-              <td>{1/(activity.total_elevation_gain /activity.distance * 30)}</td>
               <td>{(activity.total_elevation_gain).toFixed(0)}m</td>
 
             </tr>

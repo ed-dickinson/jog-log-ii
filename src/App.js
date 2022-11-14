@@ -34,19 +34,16 @@ function App() {
 
   const [athlete, setAthlete] = useState(null)
   const [activities, setActivities] = useState([])
-  const [loaded, setLoaded] = useState(false)
-  const [metric, setMetric] = useState(true)
+  // const [loaded, setLoaded] = useState(false)
+  // const [metric, setMetric] = useState(true)
 
-  const [scope, setScope] = useState(null)
-  const [tempToken, setTempToken] = useState(null)
+  // const [scope, setScope] = useState(null)
+  // const [tempToken, setTempToken] = useState(null)
   const [token, setToken] = useState({token : null, valid : null})
 
   const [state, setState] = useState({token_valid : null})
 
   const freshFromRedirect = useRef(true)
-
-  // DEBUGS
-  const [tokenExpiryDEBUG, setTokenExpiryDEBUG] = useState(null)
 
 
   // token validation check doesn't happen before athlete/fetch
@@ -86,7 +83,7 @@ function App() {
 
     const urlParams = new URLSearchParams(queryString);
 
-    if (urlParams.get('scope') === 'read,activity:read_all,read_all' && scope === null) {
+    if (urlParams.get('scope') === 'read,activity:read_all,read_all') {
       // if redirect with approval from Strava
       // then login to mongodb
       // a;so do this if athlete is found in storage
@@ -112,8 +109,6 @@ function App() {
         return
       }
 
-
-      console.log('oauth -> token',token)
       oAuthService.exchange({
         code : urlParams.get('code')
       }).then(result => {
@@ -154,7 +149,7 @@ function App() {
 
   // use effect for fetching activities
   useEffect(()=>{
-    console.log('useEffect: activities', 'token valid:', token.valid)
+
     if (activities.length > 0) {return}
 
     if (athlete && token.valid) {
@@ -165,17 +160,19 @@ function App() {
       }).then(res => {
         console.log('fetched runs:', res)
         setActivities(res)
-        setLoaded(true)
+        // setLoaded(true)
       })
     }
   },[token])
 
   // logs user into database
   useEffect(()=>{
-    console.log('useEffect: log user into DB')
+
+    if (state.fetching_login) return
 
     // is user not logged in but athlete is
     if (athlete && !user) {
+      setState({...state, fetching_login : true})
       accountService.linkStrava({
         id : athlete.id,
         password : process.env.REACT_APP_STRAVA_SECRET
@@ -189,6 +186,7 @@ function App() {
         } else {
           setUser(response.data.user)
         }
+        setState({...state, fetching_login : false})
       })
     }
   },[athlete])

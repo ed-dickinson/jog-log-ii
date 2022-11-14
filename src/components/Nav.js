@@ -10,20 +10,20 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
 
   return (
     <nav>
-      <img className="AppleLogo" src="/running-apple.png" onClick={()=>window.location.href = window.location.origin}/>
+      <img className="AppleLogo" src="/running-apple.png" onClick={()=>window.location.href = window.location.origin} alt="Illustration of a half man, half apple running along jauntily."/>
 
-      <img src="/san-fran-logo.png" style={{filter: 'drop-shadow(0px 0px 0.5px black)'}} />
+      <img src="/san-fran-logo.png" style={{filter: 'drop-shadow(0px 0px 0.5px black)'}} alt="" />
 
       <button className="NewRunButton" onClick={()=>setWriterOpen(!writerOpen)} >
-        <img src="assets/188-handwrite.png" />
+        <img src="assets/188-handwrite.png" alt="Open writer." />
       </button>
 
       <button className="UserButton" onClick={()=>setProfileOpen(!profileOpen)}>
-        <img src="assets/194-head.png" />
+        <img src="assets/194-head.png" alt="Open profile." />
       </button>
 
       <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
-        <img src="/strava-connect-button@2x.png" />
+        <img src="/strava-connect-button@2x.png" alt="" />
       </button>
 
     </nav>

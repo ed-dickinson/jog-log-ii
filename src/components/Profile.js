@@ -13,7 +13,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
       <div className={"Profile" + (profileOpen ? ' show' : ' hide')}>
 
         <div className="UserConnection">
-          <span className={user ? "Connected" : "Unconnected"}>{user ? 'user connected' : 'user unconnected'}</span> <img src={user ? 'assets/123-connection.png': 'assets/122-noconnection.png'} />
+          <span className={user ? "Connected" : "Unconnected"}>{user ? 'user connected' : 'user unconnected'}</span> <img src={user ? 'assets/123-connection.png': 'assets/122-noconnection.png'} alt="" />
         </div>
         {athlete
           ?
@@ -21,7 +21,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
             <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID">#{athlete.id}</span>
             <div>{!token.valid && <div>Strava Token Expired<br />
               <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
-                <img src="assets/strava-reconnect3-button.png" />
+                <img src="assets/strava-reconnect3-button.png" alt="Reconnect with Strava" />
               </button>
             </div>}</div>
           </div>
@@ -39,7 +39,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
             </div>
             <button>Log in</button><button>Sign Up</button><br />
             <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
-              <img src="assets/strava-connect-button.png" />
+              <img src="assets/strava-connect-button.png" alt="Connect with Strava" />
             </button>
           </div>
         }
