@@ -12,7 +12,9 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
     <nav>
       <img className="AppleLogo" src="/running-apple.png" onClick={()=>window.location.href = window.location.origin} alt="Illustration of a half man, half apple running along jauntily."/>
 
-      <img src="/san-fran-logo.png" style={{filter: 'drop-shadow(0px 0px 0.5px black)'}} alt="" />
+      <img src="/san-fran-logo.png" style={{filter: 'drop-shadow(0px 0px 0.5px black)', display: 'none'}} alt="" />
+
+      <span className="MainTitle">Jog Log</span>
 
       <button className="NewRunButton" onClick={()=>setWriterOpen(!writerOpen)} >
         <img src="assets/188-handwrite.png" alt="Open writer." />

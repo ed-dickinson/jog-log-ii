@@ -4,6 +4,8 @@
 $strava-orange: #fc4c02;
 $not-strava-blue: #02b3fd;
 
+$garamond: 'Garamond', Garamond, garamond;
+
 @mixin border {
   border: 1px solid black;
   border-radius: 5px;
@@ -11,6 +13,11 @@ $not-strava-blue: #02b3fd;
 }
 
 // @mixin
+
+// @font-face {
+//   font-family: 'Higumin';
+//   src: local('Higumin'), url('../public/assets/fonts/higumin-rough.otf') format('otf');
+// }
 
 .App {
   position: relative;
@@ -49,6 +56,19 @@ nav {
   position: relative;
 
   background-color: white;
+
+  .MainTitle {
+    font-family: $garamond;
+    font-size: 2em;
+    line-height: 1;
+    font-weight: bold;
+    // top: -0.2em;
+    // position: relative;
+    position: absolute;
+    top: 10px;
+    left: 110px;
+    text-shadow: 1px 1px 2px grey;
+  }
 
   .StravaConnectButton {
     border: 0;
@@ -246,6 +266,38 @@ aside.Writer {
     bottom: 17px;
     border: 1px solid black;
     border-radius: 3px;
+
+    padding: 1em 1.5em;
+    padding-left: 1.5em;
+    box-sizing: border-box;
+    .StravaTitle {
+      font-family: $garamond;
+      font-style: italic;
+      font-weight: bold;
+      font-size: 1.2em;
+      // position: absolute;
+      // left: 1.2em;
+      // top: 0.5em;
+    }
+    textarea {
+      resize: none;
+      // width: calc(100% - 0px);
+      // height: calc(100% - 1px);
+      // padding: 2em 1.5em 1em;
+      // box-sizing: border-box;
+      width: calc(100% - 0.25em);
+      height: calc(100% - 1.5em);
+      border: 0;
+      font-family: inherit;
+      background-color: #f2f2f2;
+
+      &:focus {
+        outline-color: $strava-orange;
+        outline: none;
+        background-color: #e6e6e6;
+      }
+    }
+
   }
 
   transition: transform 0.5s;
@@ -254,8 +306,8 @@ aside.Writer {
   }
 
   .CloseButton {
-    top: 3px;
-    right: 3px;
+    top: 6px;
+    right: 6px;
     height: 20px;
     width: 20px;
     position: absolute;
