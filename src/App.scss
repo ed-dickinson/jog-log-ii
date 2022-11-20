@@ -270,7 +270,7 @@ aside.Writer {
     padding: 1em 1.5em;
     padding-left: 1.5em;
     box-sizing: border-box;
-    .StravaTitle {
+    .StravaTitle, .RunTitle {
       font-family: $garamond;
       font-style: italic;
       font-weight: bold;
@@ -278,6 +278,18 @@ aside.Writer {
       // position: absolute;
       // left: 1.2em;
       // top: 0.5em;
+    }
+    .RunTitle {
+      background-color: white;
+      border: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    input {
+      &:focus {
+        outline: none;
+        background-color: #e6e6e6;
+      }
     }
     textarea {
       resize: none;
