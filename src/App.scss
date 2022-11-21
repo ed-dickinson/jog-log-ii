@@ -26,6 +26,8 @@ $garamond: 'Garamond', Garamond, garamond;
 
 .App main {
   padding: 1em;
+  max-width: 1000px;
+  margin: auto;
 }
 
 button {
@@ -83,15 +85,28 @@ nav {
       display: inline-block;
     }
   }
-  img.AppleLogo {
-    height: 108px;
-    position: absolute;
-    left: 5px - 12px;
-    top: -10px - 16px;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-    filter: drop-shadow(1px 1px 2px grey);
-    cursor: pointer;
+  .AppleLogo {
+    img {
+      height: 108px;
+      position: absolute;
+      left: 5px - 12px;
+      top: -10px - 16px;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+
+      cursor: pointer;
+      &.AppleGuy {
+        filter: drop-shadow(1px 1px 2px grey);
+      }
+      &.HalfAppleGuy {
+        opacity: 0;
+      }
+    }
+    &:hover {
+      .HalfAppleGuy {
+        opacity: 1;
+      }
+    }
   }
 
 
@@ -252,6 +267,7 @@ aside.Writer {
     position: absolute;
     left: 0;
     bottom: 0;
+    bottom: -100px;
     width: 132px;
     height: 251px;
     background-image: url('../public/assets/Hand Note Card --transparent-cropped-noline.png');
@@ -270,6 +286,9 @@ aside.Writer {
     padding: 1em 1.5em;
     padding-left: 1.5em;
     box-sizing: border-box;
+    &.WideStyle {
+      bottom: -133px;
+    }
     .StravaTitle, .RunTitle {
       font-family: $garamond;
       font-style: italic;

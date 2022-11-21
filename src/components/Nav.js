@@ -10,7 +10,10 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
 
   return (
     <nav>
-      <img className="AppleLogo" src="/running-apple.png" onClick={()=>window.location.href = window.location.origin} alt="Illustration of a half man, half apple running along jauntily."/>
+    <span className="AppleLogo" onClick={()=>window.location.href = window.location.origin}>
+      <img className="AppleGuy" src="/running-apple.png"  alt="Illustration of a half man, half apple running along jauntily."/>
+      <img className="HalfAppleGuy" src="/assets/running-apple-slice.png"  alt="Illustration of a half man, half apple running along jauntily."/>
+      </span>
 
       <img src="/san-fran-logo.png" style={{filter: 'drop-shadow(0px 0px 0.5px black)', display: 'none'}} alt="" />
 
