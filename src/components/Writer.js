@@ -3,10 +3,19 @@ import React, {useState, useEffect} from 'react'
 const Writer = ({writerOpen, setWriterOpen, stravaActivity}) => {
 
   const [runDescription, setRunDescription] = useState('');
-  const [runTitle, setRunTitle] = useState(stravaActivity ? stravaActivity.name : '')
+  const [runTitle, setRunTitle] = useState('')
+  const [runDate, setRunDate] = useState('')
+  const [runTime, setRunTime] = useState('')
+
+  stravaActivity ? console.log(stravaActivity) : console.log('no strava activity')
 
   useEffect(()=>{
     setRunTitle(stravaActivity ? stravaActivity.name : '')
+    let epoch = stravaActivity ? new Date(stravaActivity.start_date_local) : new Date()
+    let date = epoch.toISOString().slice(0,10)
+    let time = epoch.toISOString().slice(11,19)
+    setRunDate(date)
+    setRunTime(time)
   },[stravaActivity])
 
   return (
@@ -24,6 +33,20 @@ const Writer = ({writerOpen, setWriterOpen, stravaActivity}) => {
         value={runDescription}
         onChange={({target}) => setRunDescription(target.value)}
       />
+
+      <input type="date"
+        value={runDate}
+        onChange={({target}) => { console.log(target.value);setRunDate(target.value)}}
+      ></input>
+
+      <input type="time"
+        value={runTime}
+        onChange={({target}) => setRunTime(target.value)}
+      ></input>
+
+      <button className="SaveButton Alert">
+        Save
+      </button>
 
     </div>
       <div className="Hand" >

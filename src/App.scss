@@ -93,7 +93,6 @@ nav {
       top: -10px - 16px;
       image-rendering: crisp-edges;
       image-rendering: pixelated;
-
       cursor: pointer;
       &.AppleGuy {
         filter: drop-shadow(1px 1px 2px grey);
@@ -134,6 +133,13 @@ nav {
   }
 
 
+}
+
+@media only screen and (min-width: 1100px) {
+  nav {
+    // max-width: calc(100% - 4em);
+    // margin: 2em auto;
+  }
 }
 
 .ProfileContainer {
@@ -259,7 +265,7 @@ aside.Writer {
   left: 0;
   min-width: 132px;
   min-height: 251px;
-  max-width: 600px;
+  max-width: 700px;
   width: calc(100% - 82px);
   height: 300px;
 
@@ -283,7 +289,7 @@ aside.Writer {
     border: 1px solid black;
     border-radius: 3px;
 
-    padding: 1em 1.5em;
+    padding: 0.75em 1.5em 1em;
     padding-left: 1.5em;
     box-sizing: border-box;
     &.WideStyle {
@@ -305,6 +311,7 @@ aside.Writer {
       box-sizing: border-box;
     }
     input {
+      border: 0;
       &:focus {
         outline: none;
         background-color: #e6e6e6;
@@ -317,7 +324,7 @@ aside.Writer {
       // padding: 2em 1.5em 1em;
       // box-sizing: border-box;
       width: calc(100% - 0.25em);
-      height: calc(100% - 1.5em);
+      height: calc(100% - 1.5em - 0.8rem);
       border: 0;
       font-family: inherit;
       background-color: #f2f2f2;
@@ -326,6 +333,36 @@ aside.Writer {
         outline-color: $strava-orange;
         outline: none;
         background-color: #e6e6e6;
+      }
+    }
+    .SaveButton {
+      width: 40px;
+      height: 39px;
+      box-sizing: border-box;
+      display: inline-block;
+      background-image: url('../public/assets/floppy-60-double39x80.png');
+      background-color: transparent;
+
+      border: 0px solid white;
+      font-size: 0;
+      padding: 0;
+      &:hover {
+        background-position: 100%;
+      }
+      & div {
+        display: inline-block;
+      }
+      position: absolute;
+      right: 2px;
+      bottom: 5px;
+      &.Alert::after {
+        content: 'alert';
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        left: 4px;
+        top: 2px;
+        background-image: url('../public/assets/223-alert.png')
       }
     }
 
