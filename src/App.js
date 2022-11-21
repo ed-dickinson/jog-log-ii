@@ -17,6 +17,7 @@ import Intro from './components/Intro'
 import Footer from './components/Footer'
 import Writer from './components/Writer'
 import Profile from './components/Profile'
+import Settings from './components/Settings'
 import StravaAthlete from './components/StravaAthlete'
 import StravaActivities from './components/StravaActivities'
 import PermissionFailure from './components/PermissionFailure'
@@ -31,6 +32,7 @@ function App() {
 
   const [writerOpen, setWriterOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   const [athlete, setAthlete] = useState(null)
   const [activities, setActivities] = useState([])
@@ -334,9 +336,14 @@ function App() {
     <div className="App">
 
       <Nav writerOpen={writerOpen} setWriterOpen={setWriterOpen} profileOpen={profileOpen} setProfileOpen={setProfileOpen}
+      settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen}
       />
+
       <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
       athlete={athlete} user={user} token={token}/>
+
+      <Settings settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen} />
+
       <header className="App-header">
 
       </header>

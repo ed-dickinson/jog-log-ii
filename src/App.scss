@@ -109,7 +109,7 @@ nav {
   }
 
 
-  .NewRunButton {
+  .NewRunButton, .SettingsButton {
     // height: 2em;
     // width: 2em;
     // display: inline-block;
@@ -123,6 +123,8 @@ nav {
       filter: invert(0.2);
     }
   }
+
+
 
   .UserButton {
     border: 1px solid black;
@@ -142,7 +144,27 @@ nav {
   }
 }
 
-.ProfileContainer {
+.SettingsButton, .SettingsContainer {
+  display: none;
+}
+
+.SettingsContainer {
+  .Setting {
+    button {
+      background-image: url('../public/assets/102-checkbuttondouble32x14.png');
+      border: 0;
+      background-color: transparent;
+      height: 14px;
+      width: 16px;
+        // background-position: 100%;
+      &.Off {
+        background-position: 100%;
+      }
+    }
+  }
+}
+
+.ProfileContainer, .SettingsContainer {
   height: 0;
   position: relative;
   // width: 100%;

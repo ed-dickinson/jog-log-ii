@@ -4,7 +4,7 @@ import React from 'react'
 
 const current_base_url = window.location.origin
 
-const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
+const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen, settingsOpen, setSettingsOpen}) => {
 
 // <button className="UserButton" onClick={()=>{window.location.href = "/profile"}}>
 
@@ -21,6 +21,10 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen}) => {
 
       <button className="NewRunButton" onClick={()=>setWriterOpen(!writerOpen)} >
         <img src="assets/188-handwrite.png" alt="Open writer." />
+      </button>
+
+      <button className="SettingsButton" onClick={()=>setSettingsOpen(!settingsOpen)} >
+        <img src="assets/99-compass.png" alt="Open writer." />
       </button>
 
       <button className="UserButton" onClick={()=>setProfileOpen(!profileOpen)}>
