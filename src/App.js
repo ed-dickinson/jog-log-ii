@@ -386,7 +386,7 @@ function App() {
 
 
 
-      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} stravaActivity={stravaActivity}/>
+      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} stravaActivity={stravaActivity} user={user} token={token}/>
 
 
       <Footer />

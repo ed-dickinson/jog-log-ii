@@ -28,6 +28,7 @@ $garamond: 'Garamond', Garamond, garamond;
   padding: 1em;
   max-width: 1000px;
   margin: auto;
+  margin-top: 2em;
 }
 
 button {
@@ -44,6 +45,7 @@ a:hover {
 nav {
   @include border;
   margin: 1em;
+  // margin-bottom: 1em;
 
   font-family: 'Luminari', Luminari, luminari;
   font-family: 'Garamond', Garamond, garamond;
