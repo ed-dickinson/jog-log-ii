@@ -3,6 +3,8 @@ import React, {useState, useEffect} from 'react'
 import runService from '../services/run'
 import dateTool from '../services/dates'
 
+// THING NEEDS REFRESH UPDATING WHATEVER WHEN RUN IS ADDED/EDITED
+
 const Writer = ({writerOpen, setWriterOpen, stravaActivity, user, token}) => {
 
   const [runDescription, setRunDescription] = useState('');

@@ -291,20 +291,12 @@ main {
           cursor: pointer;
           .LinkedRunImpression {
             font-weight: normal;
-            display: none;
-          }
-          &.Expanded {
-            .LinkedRunImpression {
-              display: block;
-            }
           }
         }
 
       }
     }
-    td {
-      vertical-align: top;
-    }
+
     .LinkedRunImpression {
       margin-left: 0.5em;
       padding-left: 0.5em;
@@ -313,6 +305,28 @@ main {
   }
 }
 
+.StravaActivities, .Runs {
+  max-width: 49%;
+  display: inline-block;
+}
+
+.Runs {
+  .RunTitle {
+    cursor: pointer;
+  }
+}
+
+// expander for run title/descri[ption]
+td {
+  .LinkedRunImpression {
+    display: none;
+  }
+  &.Expanded {
+    .LinkedRunImpression {
+      display: block;
+    }
+  }
+}
 
 aside.Writer {
   position: fixed;
@@ -477,7 +491,9 @@ table {
   tr {
 
     td {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
+      vertical-align: top;
     }
   }
   .ElevationIcon {

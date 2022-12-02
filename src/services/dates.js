@@ -4,6 +4,13 @@ const month_names = ["January","February","March","April","May","June","July",
 const monthsAbr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 const day_names = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
+const addZero = (input) => {
+
+  let output = input.toString()
+
+  return (output.length < 2) ? '0' + output : output
+}
+
 const monthName = (monthNumber) => {
 
     const output = month_names[monthNumber]
@@ -12,6 +19,16 @@ const monthName = (monthNumber) => {
 
 }
 
-const exported = { monthName }
+const simpleDate = (input) => {
+
+  let d = new Date(input)
+
+  const output = `${addZero(d.getDate())}-${addZero(d.getMonth()+1)}-${d.getFullYear().toString().slice(2)}`
+
+  return output
+
+}
+
+const exported = { monthName , simpleDate }
 
 export default exported

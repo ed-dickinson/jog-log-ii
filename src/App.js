@@ -20,6 +20,7 @@ import Profile from './components/Profile'
 import Settings from './components/Settings'
 import StravaAthlete from './components/StravaAthlete'
 import StravaActivities from './components/StravaActivities'
+import Runs from './components/Runs'
 import PermissionFailure from './components/PermissionFailure'
 
 // const UserContext = createContext()
@@ -403,8 +404,9 @@ function App() {
               </div>} />
           </Routes>
         </BrowserRouter>
-        {activities.length} activities loaded
-        <StravaActivities activities={activities} runs={runs} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen}/>
+        {activities.length} activities loaded <br />
+        <StravaActivities activities={activities} runs={runs} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen} />
+        <Runs runs={runs} setWriterOpen={setWriterOpen} />
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
         </button>
