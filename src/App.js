@@ -42,6 +42,9 @@ function App() {
 
   // const [scope, setScope] = useState(null)
   // const [tempToken, setTempToken] = useState(null)
+
+  const [runs, setRuns] = useState([])
+
   const [token, setToken] = useState({token : null, valid : null})
 
   const [state, setState] = useState({token_valid : null})
@@ -203,9 +206,32 @@ function App() {
     }
   },[athlete])
 
-  // useEffect(()=>{
-  //
-  // },[])
+  const compareRunsAndActivities = () => {
+    activities.forEach(activity => {
+      let found = runs.find(x => x.strava_id === activity.id)
+      if (found) {
+        activity.linked_run = found
+        console.log(found)
+      }
+    })
+  }
+
+  // get runs from account
+  useEffect(()=>{
+    if (user) {
+      console.log('user:', user)
+      accountService.getRuns({
+        no : user.no
+      }).then(response => {
+        console.log(response)
+        setRuns(response.runs)
+      })
+    }
+  }, [user])
+
+  useEffect(()=>{
+    compareRunsAndActivities()
+  },[activities, runs])
 
   // useEffect(()=>{
   //   console.log('athlete effect triggered')
@@ -378,7 +404,7 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities loaded
-        <StravaActivities activities={activities} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen}/>
+        <StravaActivities activities={activities} runs={runs} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen}/>
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
         </button>

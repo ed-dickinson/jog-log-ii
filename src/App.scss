@@ -282,6 +282,37 @@ main {
 }
 
 
+.StravaActivities {
+  table {
+    tr {
+      &.isLinked {
+        td.ActivityName {
+          font-weight: bold;
+          cursor: pointer;
+          .LinkedRunImpression {
+            font-weight: normal;
+            display: none;
+          }
+          &.Expanded {
+            .LinkedRunImpression {
+              display: block;
+            }
+          }
+        }
+
+      }
+    }
+    td {
+      vertical-align: top;
+    }
+    .LinkedRunImpression {
+      margin-left: 0.5em;
+      padding-left: 0.5em;
+      border-left: 1px solid black;
+    }
+  }
+}
+
 
 aside.Writer {
   position: fixed;

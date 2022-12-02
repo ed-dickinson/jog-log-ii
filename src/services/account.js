@@ -54,6 +54,14 @@ const linkStrava = async params => {
   return response
 }
 
-const exported = { linkStrava, linkNewStrava }
+const getRuns = async params => {
+  console.log('getting runs', params)
+
+  const response = await axios.get(baseURL + urlExtension + '/' + params.no + '/runs')
+
+  return response.data
+}
+
+const exported = { linkStrava, linkNewStrava, getRuns }
 
 export default exported

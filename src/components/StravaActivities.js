@@ -1,14 +1,16 @@
 import React from 'react'
 
-const StravaActivities = ({activities, setStravaActivity, setWriterOpen}) => {
+const StravaActivities = ({activities, runs, setStravaActivity, setWriterOpen}) => {
   return (
 
     <div className="StravaActivities">
 
+    comparing {runs.length} runs
+
       <table>
         <tbody>
           {activities.map(activity =>
-            <tr key={activity.id}>
+            <tr key={activity.id} className={activity.linked_run ? 'isLinked' : 'isNotLinked'}>
             <td>{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" alt="Run"/>
               :activity.type==='Ride'?<img src="/assets/Treasures49-cyclist2.png" alt="Ride"/>
               :activity.type==='Swim'?<img src="/assets/Treasures53-swimmer.png" alt="Swim"/>
@@ -20,7 +22,11 @@ const StravaActivities = ({activities, setStravaActivity, setWriterOpen}) => {
               :activity.type==='Row'?'🚣'
               :activity.type==='Walk'?<img src="/assets/Treasures49-walker.png" alt="Walk"/>
               :'🕴️'}</td>
-              <td>{activity.name}</td>
+              <td>{activity.linked_run ? '*' : ' '}</td>
+              <td className="ActivityName" onClick={(e)=>{e.target.classList.toggle('Expanded')}}>
+                {activity.name}
+                {activity.linked_run && <div className="LinkedRunImpression">{activity.linked_run.description}</div>}
+              </td>
               <td className="ButtonCell">
                 <button
                   className="ActivityLogButton"
