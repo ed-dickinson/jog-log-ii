@@ -12,7 +12,6 @@ const Writer = ({writerOpen, setWriterOpen, stravaActivity, user, token}) => {
   const [runDate, setRunDate] = useState('')
   const [runTime, setRunTime] = useState('')
 
-  stravaActivity ? console.log(stravaActivity) : console.log('no strava activity')
 
   useEffect(()=>{
 

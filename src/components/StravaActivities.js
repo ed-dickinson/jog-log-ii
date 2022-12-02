@@ -1,11 +1,13 @@
 import React from 'react'
 
-const StravaActivities = ({activities, runs, setStravaActivity, setWriterOpen}) => {
+const StravaActivities = ({activities,  setStravaActivity, setWriterOpen}) => {
+
+
   return (
 
     <div className="StravaActivities">
 
-    comparing {runs.length} runs
+    
 
       <table>
         <tbody>

@@ -3,7 +3,7 @@ import React from 'react'
 import dateTool from '../services/dates'
 
 const Runs = ({runs, setWriterOpen}) => {
-  console.log(runs)
+
   return (
 
     <div className="Runs">
@@ -12,7 +12,7 @@ const Runs = ({runs, setWriterOpen}) => {
         <tbody>
           {runs.map(run =>
             <tr key={run.no}>
-
+              <td><img src="/assets/Treasures48-runner2.png" alt="Run"/></td>
               <td className="RunTitle" onClick={(e)=>{e.target.classList.toggle('Expanded')}}>
                 {run.title}
                 <div className="LinkedRunImpression">{run.description}</div>
@@ -26,10 +26,6 @@ const Runs = ({runs, setWriterOpen}) => {
                     setWriterOpen(true)
                   }}>LOG</button>
               </td>
-
-
-
-
 
             </tr>
           )}

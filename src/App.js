@@ -80,7 +80,7 @@ function App() {
 
   // handles redirect
   useEffect(() => {
-    console.log('useEffect: scope check & exchange')
+
     const queryString = window.location.search;
     const route = window.location.pathname.slice(1)
 
@@ -97,17 +97,15 @@ function App() {
 
       // only do exchange if token needs refreshing
       // although this would be handy to change to recognising only doing it on the first redirect not on app changes
-      console.log('fresh off redirect?', freshFromRedirect.current)
+
       if (!freshFromRedirect.current) {
         // return
       } else {
         freshFromRedirect.current = false
       }
-      console.log('valid token?', token.valid)
-      // why is this not working??????????
+
       // if (token.valid !== false) {
       if (token.valid === true) {
-        console.log('token valid - no auth')
         return
       }
       // if (token.valid === null) {
@@ -116,16 +114,13 @@ function App() {
       //   // return
       // }
       if (localStorage.getItem('AccessToken') && localStorage.getItem('TokenExpires') * 1000 > new Date().getTime()) {
-        console.log('direct check token valid')
         return
       }
 
-      console.log('oauth triggered — token val:', token.valid, 'url', urlParams.get('code'))
 
       oAuthService.exchange({
         code : urlParams.get('code')
       }).then(result => {
-        console.log(result, 'auth exchanged')
 
         localStorage.setItem('TokenExpires', result.expires_at)
         localStorage.setItem('AccessToken', result.access_token)
@@ -133,7 +128,6 @@ function App() {
 
         setToken({token: result.access_token, valid: true})
         setAthlete(result.athlete)
-        console.log('athlete set by strava')
       }).catch(err=>{
         console.log('bad auth request')
       })
@@ -142,12 +136,13 @@ function App() {
       // setTempToken(urlParams.get('code'))
     } else {
       // this leaves redirect page with no
-      console.log('trigger rerequest')
+
       setState({...state, scope_rerequest : true})
       return
     }
 
-  }, [token]) // empty array dependency only runs once
+  }, [token,
+    state]) // empty array dependency only runs once
 
   // // check if token valid
   // useEffect(()=>{
@@ -193,7 +188,6 @@ function App() {
         id : athlete.id,
         password : process.env.REACT_APP_STRAVA_SECRET
       }).then(response => {
-        console.log('login response',response)
         if (response.status === 204) {
           accountService.linkNewStrava({
             id : athlete.id,
@@ -203,36 +197,49 @@ function App() {
           setUser(response.data.user)
         }
         setState({...state, fetching_login : false})
+
       })
     }
-  },[athlete])
+  },[athlete,
+    state, user])
 
-  const compareRunsAndActivities = () => {
-    activities.forEach(activity => {
+  const compareRunsAndActivities = (runs, activities) => {
+    console.log('comping runs and acts')
+    let linked_runs = []
+    let activities_dupe = activities
+    activities_dupe.forEach(activity => {
       let found = runs.find(x => x.strava_id === activity.id)
       if (found) {
         activity.linked_run = found
-        console.log(found)
+        linked_runs.push(found)
       }
     })
+    console.log(linked_runs)
+    setActivities(activities_dupe)
+    // compareRunsAndActivities()
   }
 
   // get runs from account
   useEffect(()=>{
     if (user) {
-      console.log('user:', user)
       accountService.getRuns({
         no : user.no
       }).then(response => {
-        console.log(response)
         setRuns(response.runs)
+        console.log('got runs', runs)
+        // compareRunsAndActivities()
       })
     }
   }, [user])
 
-  useEffect(()=>{
-    compareRunsAndActivities()
+  useEffect(
+    () => {
+    compareRunsAndActivities(runs, activities)
   },[activities, runs])
+
+  // useEffect(()=>{
+  //   console.log('runs changed:', runs)
+  // }, [runs])
 
   // useEffect(()=>{
   //   console.log('athlete effect triggered')
@@ -404,8 +411,8 @@ function App() {
               </div>} />
           </Routes>
         </BrowserRouter>
-        {activities.length} activities loaded <br />
-        <StravaActivities activities={activities} runs={runs} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen} />
+        {activities.length} activities & {runs.length} runs loaded <br />
+        <StravaActivities activities={activities} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen} />
         <Runs runs={runs} setWriterOpen={setWriterOpen} />
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
