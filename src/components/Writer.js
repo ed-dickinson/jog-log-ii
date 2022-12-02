@@ -5,7 +5,7 @@ import dateTool from '../services/dates'
 
 // THING NEEDS REFRESH UPDATING WHATEVER WHEN RUN IS ADDED/EDITED
 
-const Writer = ({writerOpen, setWriterOpen, stravaActivity, user, token}) => {
+const Writer = ({writerOpen, setWriterOpen, stravaActivity, user, token, getRuns}) => {
 
   const [runDescription, setRunDescription] = useState('');
   const [runTitle, setRunTitle] = useState('')
@@ -43,6 +43,8 @@ const Writer = ({writerOpen, setWriterOpen, stravaActivity, user, token}) => {
         runParameters
       })
       console.log(response)
+      setWriterOpen(false)
+      getRuns()
     } catch (exception) {
       console.log('did not work', exception)
     }

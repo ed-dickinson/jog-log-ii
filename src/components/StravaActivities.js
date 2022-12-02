@@ -1,13 +1,20 @@
 import React from 'react'
 
-const StravaActivities = ({activities,  setStravaActivity, setWriterOpen}) => {
+const StravaActivities = ({activities, runs, setStravaActivity, setWriterOpen}) => {
 
+  activities.forEach(activity => {
+    let found = runs.find(x => x.strava_id === activity.id)
+    if (found) {
+      activity.linked_run = found
+      
+    }
+  })
 
   return (
 
     <div className="StravaActivities">
 
-    
+
 
       <table>
         <tbody>

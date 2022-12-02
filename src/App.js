@@ -174,7 +174,9 @@ function App() {
         setStravaActivity(res[0])
       })
     }
-  },[token])
+  },[token
+  ,activities, athlete
+  ])
 
   // logs user into database
   useEffect(()=>{
@@ -203,166 +205,44 @@ function App() {
   },[athlete,
     state, user])
 
-  const compareRunsAndActivities = (runs, activities) => {
-    console.log('comping runs and acts')
-    let linked_runs = []
-    let activities_dupe = activities
-    activities_dupe.forEach(activity => {
-      let found = runs.find(x => x.strava_id === activity.id)
-      if (found) {
-        activity.linked_run = found
-        linked_runs.push(found)
-      }
+  // const compareRunsAndActivities = (runs, activities) => {
+  //   console.log('comping runs and acts')
+  //   let linked_runs = []
+  //   let activities_dupe = activities
+  //   activities_dupe.forEach(activity => {
+  //     let found = runs.find(x => x.strava_id === activity.id)
+  //     if (found) {
+  //       activity.linked_run = found
+  //       linked_runs.push(found)
+  //     }
+  //   })
+  //   console.log('linked',linked_runs)
+  //   console.log('activities', activities)
+  //   setActivities(activities_dupe)
+  //   // compareRunsAndActivities()
+  // }
+
+  const getRuns = () => {
+    accountService.getRuns({
+      no : user.no
+    }).then(response => {
+      setRuns(response.runs)
     })
-    console.log(linked_runs)
-    setActivities(activities_dupe)
-    // compareRunsAndActivities()
   }
 
   // get runs from account
   useEffect(()=>{
     if (user) {
-      accountService.getRuns({
-        no : user.no
-      }).then(response => {
-        setRuns(response.runs)
-        console.log('got runs', runs)
-        // compareRunsAndActivities()
-      })
+      getRuns()
     }
   }, [user])
 
   useEffect(
     () => {
-    compareRunsAndActivities(runs, activities)
+    // compareRunsAndActivities(runs, activities)
   },[activities, runs])
 
-  // useEffect(()=>{
-  //   console.log('runs changed:', runs)
-  // }, [runs])
 
-  // useEffect(()=>{
-  //   console.log('athlete effect triggered')
-  //   if (athlete) {
-  //     let token_expiry = localStorage.getItem('TokenExpires')
-  //
-  //     setTokenExpiryDEBUG(token_expiry)
-  //
-  //     let token_still_valid = (token_expiry * 1000 > new Date().getTime())
-  //
-  //     if (token_still_valid) {
-  //       // stops double triggering
-  //
-  //       console.log('token still valid - fetch strava')
-  //       setState({...state, token_valid : true})
-  //
-  //     } else {
-  //       console.log('token not still valid - ask for reconnection')
-  //       setState({...state, token_valid : false})
-  //       // ask to reaffirm with strava
-  //     }
-  //   }
-  // },[athlete])
-
-
-  // handles athlete change
-  // useEffect(()=>{
-  //   console.log('athlete changed', athlete)
-  //
-  //   // this DOUBLE TRIGGERS on athlete change becuase it retrieves it from token and then sets it by strava
-  //   if (athlete) {
-  //     accountService.linkStrava({
-  //       id : athlete.id,
-  //       password : process.env.REACT_APP_STRAVA_SECRET
-  //     }).then(response => {
-  //       console.log('res',response)
-  //       if (response.status === 204) {
-  //         accountService.linkNewStrava({
-  //           id : athlete.id,
-  //           password : process.env.REACT_APP_STRAVA_SECRET
-  //         })
-  //       } else {
-  //         setUser(response.data.user)
-  //       }
-  //     })
-  //
-  //     // stravaService.allActivities({
-  //     //   access_token : localStorage.getItem('AccessToken'),
-  //     //   activities : activities , setActivities : setActivities
-  //     // }).then(() => {
-  //     //   setLoaded(true)
-  //     // })
-  //     // stravaService.activities({
-  //     //   access_token : localStorage.getItem('AccessToken'),
-  //     //   activities : activities , setActivities : setActivities
-  //     // }).then(res => {
-  //     //   console.log(res)
-  //     //   setActivities(res)
-  //     //   setLoaded(true)
-  //     // })
-  //   }
-  //
-  //
-  // }, [athlete])
-
-
-  // const firstUpdate = useRef(true)
-  // // handles redirect (scope change)
-  // useEffect(()=>{
-  //
-  //   // this should sort ouyt the double rendering - but really this effect should be moved to a serate function called by the effetc bofore (the scope looking one)
-  //   if (firstUpdate.current) {firstUpdate.current = false; return}
-  //
-  //
-  //   let existing_token_expiry = localStorage.getItem('TokenExpires')
-  //
-  //   setTokenExpiryDEBUG(existing_token_expiry)
-  //
-  //   let stored_athlete = localStorage.getItem('Athlete')
-  //   if (stored_athlete !== null) {
-  //     setAthlete(JSON.parse(localStorage.getItem('Athlete')))
-  //     console.log('athlete set by existing')
-  //   }
-  //
-  //   // if token still valid then retrive athlete from localStorage
-  //   if (existing_token_expiry * 1000 > new Date().getTime()) {
-  //     // stops double triggering
-  //     if (athlete) return
-  //     console.log('token still valid - fetch strava')
-  //     setState({...state, token_valid : true})
-  //
-  //     return
-  //
-  //   } else {
-  //     console.log('token not still valid - ask for reconnection')
-  //     setState({...state, token_valid : false})
-  //     // ask to reaffirm with strava
-  //   }
-  //
-  //   // exchange with strava
-  //   // oAuthService.exchange({
-  //   //   client_id : '70098',
-  //   //   client_secret : process.env.REACT_APP_CLIENT_SECRET,
-  //   //   code : tempToken,
-  //   //   grant_type : 'authorization_code'
-  //   // }).then(result => {
-  //   //
-  //   //   localStorage.setItem('TokenExpires', result.expires_at)
-  //   //   localStorage.setItem('AccessToken', result.access_token)
-  //   //   localStorage.setItem('Athlete', JSON.stringify(result.athlete))
-  //   //
-  //   //   setAthlete(result.athlete)
-  //   //   console.log('athlete set by strava')
-  //   //
-  //   //   // stravaService.allActivities({
-  //   //   //   access_token : result.access_token,
-  //   //   //   activities : activities , setActivities : setActivities
-  //   //   // }).then(res => {
-  //   //   //   console.log(res)
-  //   //   //   setLoaded(true)
-  //   //   // })
-  //   // })
-  // }, [scope])
 
 // <Route path="/profile" element={<Profile />} />
 
@@ -412,7 +292,7 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities & {runs.length} runs loaded <br />
-        <StravaActivities activities={activities} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen} />
+        <StravaActivities activities={activities} runs={runs} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen} />
         <Runs runs={runs} setWriterOpen={setWriterOpen} />
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
@@ -421,7 +301,7 @@ function App() {
 
 
 
-      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} stravaActivity={stravaActivity} user={user} token={token}/>
+      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} stravaActivity={stravaActivity} user={user} token={token}  getRuns={getRuns} />
 
 
       <Footer />
