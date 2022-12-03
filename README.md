@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# This is the Jog-Log readme!
+
+You don't have to read it.
+
+————————————————————
+
+This is the stuff the react team included in theirs:
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
