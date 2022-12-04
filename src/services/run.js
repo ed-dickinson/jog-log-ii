@@ -12,7 +12,10 @@ const createNew = async params => {
 
   const bodyObject = params.runParameters
 
-  const response = await axios.post(baseURL + urlExtension + '/new', bodyObject, config)
+  // adds url end depending on if edit or new
+  const newOrEdit = params.runParameters.no ? `/edit/${params.runParameters.no}` : '/new'
+
+  const response = await axios.post(baseURL + urlExtension + newOrEdit, bodyObject, config)
 
   console.log('new response:',response)
   // console.log(response, response.status, response.message)

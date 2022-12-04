@@ -37,7 +37,7 @@ function App() {
 
   const [athlete, setAthlete] = useState(null)
   const [activities, setActivities] = useState([])
-  const [stravaActivity, setStravaActivity] = useState(null)
+  const [runInMemory, setRunInMemory] = useState(null)
   // const [loaded, setLoaded] = useState(false)
   // const [metric, setMetric] = useState(true)
 
@@ -75,7 +75,7 @@ function App() {
       }
       debug += 'retrieved from localStorage'
     }
-    console.log(debug)
+    // console.log(debug)
   },[])
 
   // handles redirect
@@ -171,7 +171,7 @@ function App() {
         console.log('fetched runs:', res)
         setActivities(res)
         // setLoaded(true)
-        setStravaActivity(res[0])
+        setRunInMemory(res[0])
       })
     }
   },[token
@@ -242,6 +242,16 @@ function App() {
     // compareRunsAndActivities(runs, activities)
   },[activities, runs])
 
+  // useEffect(()=>{
+  //   if (writerOpen && writerOpen._id) {
+  //     setRunInMemory(writerOpen)
+  //   }
+  // },[writerOpen])
+
+  useEffect(()=>{
+    console.log(runInMemory)
+  },[runInMemory])
+
 
 
 // <Route path="/profile" element={<Profile />} />
@@ -292,8 +302,8 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities & {runs.length} runs loaded <br />
-        <StravaActivities activities={activities} runs={runs} setStravaActivity={setStravaActivity} setWriterOpen={setWriterOpen} />
-        <Runs runs={runs} setWriterOpen={setWriterOpen} />
+        <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
+        <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
         <button style={{width: '100%', height: '300px'}}>
           Massive button to test {'<main>'} interactivity.
         </button>
@@ -301,7 +311,7 @@ function App() {
 
 
 
-      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} stravaActivity={stravaActivity} user={user} token={token}  getRuns={getRuns} />
+      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} runInMemory={runInMemory} user={user} token={token}  getRuns={getRuns} />
 
 
       <Footer />

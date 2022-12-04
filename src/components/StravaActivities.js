@@ -1,12 +1,12 @@
 import React from 'react'
 
-const StravaActivities = ({activities, runs, setStravaActivity, setWriterOpen}) => {
+const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen}) => {
 
   activities.forEach(activity => {
     let found = runs.find(x => x.strava_id === activity.id)
     if (found) {
       activity.linked_run = found
-      
+
     }
   })
 
@@ -40,7 +40,11 @@ const StravaActivities = ({activities, runs, setStravaActivity, setWriterOpen}) 
                 <button
                   className="ActivityLogButton"
                   onClick={()=>{
-                    setStravaActivity(activity)
+                    if (activity.linked_run) {
+                      setRunInMemory(activity.linked_run)
+                    } else {
+                      setRunInMemory(activity)
+                    }
                     setWriterOpen(true)
                   }}>LOG</button>
               </td>

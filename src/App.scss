@@ -297,17 +297,28 @@ main {
       }
     }
 
-    .LinkedRunImpression {
-      margin-left: 0.5em;
-      padding-left: 0.5em;
-      border-left: 1px solid black;
-    }
+
   }
 }
 
 .StravaActivities, .Runs {
   max-width: 49%;
   display: inline-block;
+  .LinkedRunImpression {
+    margin-left: 0em;
+    padding-left: 0.5em;
+    // border-left: 2px solid black;
+    position: relative;
+    &::before {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: calc(100% - 0.4em);
+      top: 0.3em;
+      left: 0;
+      background-color: black;
+    }
+  }
 }
 
 .Runs {

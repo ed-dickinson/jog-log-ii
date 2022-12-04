@@ -2,7 +2,7 @@ import React from 'react'
 
 import dateTool from '../services/dates'
 
-const Runs = ({runs, setWriterOpen}) => {
+const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
 
   return (
 
@@ -22,7 +22,8 @@ const Runs = ({runs, setWriterOpen}) => {
                 <button
                   className="ActivityLogButton"
                   onClick={()=>{
-                    console.log('set run in writer')
+                    console.log('set run in writer', run)
+                    setRunInMemory(run)
                     setWriterOpen(true)
                   }}>LOG</button>
               </td>
