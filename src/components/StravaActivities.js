@@ -20,7 +20,7 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen}) => 
         <tbody>
           {activities.map(activity =>
             <tr key={activity.id} className={activity.linked_run ? 'isLinked' : 'isNotLinked'}>
-            <td>{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" alt="Run"/>
+            <td className="RunIcon StravaRun">{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" alt="Run"/>
               :activity.type==='Ride'?<img src="/assets/Treasures49-cyclist2.png" alt="Ride"/>
               :activity.type==='Swim'?<img src="/assets/Treasures53-swimmer.png" alt="Swim"/>
               :activity.type==='Hike'?'🥾'

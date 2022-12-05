@@ -319,6 +319,14 @@ main {
       background-color: black;
     }
   }
+  .RunIcon {
+    &.StravaRun {
+      img {
+        filter:  contrast(0%) invert(1) sepia(100%) saturate(1000%) brightness(100%) hue-rotate(-20deg);
+        overflow: visible;
+      }
+    }
+  }
 }
 
 .Runs {
@@ -326,26 +334,7 @@ main {
   .RunTitle {
     cursor: pointer;
   }
-  .RunIcon {
-    position: relative;
-    &.LinkedToStrava {
-      img {
-        // -webkit-text-stroke: 1px #8ebf42;
-        // filter: drop-shadow(1px 1px 0px $strava-orange);
-      }
-    }
-    &.LinkedToStrava::after {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      content: '';
-      width: 4px;
-      height: 4px;
-      background-color: $strava-orange;
-      border-radius: 50%;
 
-    }
-  }
 
 }
 
