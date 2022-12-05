@@ -8,6 +8,10 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen, settingsOp
 
 // <button className="UserButton" onClick={()=>{window.location.href = "/profile"}}>
 
+// <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
+//   <img src="/strava-connect-button@2x.png" alt="" />
+// </button>
+
   return (
     <nav>
     <span className="AppleLogo" onClick={()=>window.location.href = window.location.origin}>
@@ -31,9 +35,7 @@ const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen, settingsOp
         <img src="assets/194-head.png" alt="Open profile." />
       </button>
 
-      <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
-        <img src="/strava-connect-button@2x.png" alt="" />
-      </button>
+
 
     </nav>
   )
