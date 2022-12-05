@@ -15,6 +15,8 @@ const createNew = async params => {
   // adds url end depending on if edit or new
   const newOrEdit = params.runParameters.no ? `/edit/${params.runParameters.no}` : '/new'
 
+  // THE EDIT API DOESN't DO ANYTHING ATM - it's not a problem here ...yet
+
   const response = await axios.post(baseURL + urlExtension + newOrEdit, bodyObject, config)
 
   console.log('new response:',response)
