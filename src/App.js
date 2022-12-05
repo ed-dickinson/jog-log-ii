@@ -306,9 +306,7 @@ function App() {
         {activities.length} activities & {runs.length} runs loaded <br />
         <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
         <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
-        <button style={{width: '100%', height: '300px'}}>
-          Massive button to test {'<main>'} interactivity.
-        </button>
+      
       </main>
 
 
