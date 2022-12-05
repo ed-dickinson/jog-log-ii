@@ -226,7 +226,9 @@ function App() {
     accountService.getRuns({
       no : user.no
     }).then(response => {
-      setRuns(response.runs)
+      let sorted_runs = response.runs.sort((a, b) => {return new Date(b.date) - new Date(a.date)})
+      // setRuns(response.runs)
+      setRuns(sorted_runs)
     })
   }
 

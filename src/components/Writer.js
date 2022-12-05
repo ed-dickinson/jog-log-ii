@@ -11,7 +11,12 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, user, token, getRuns}) 
   const [runTitle, setRunTitle] = useState('')
   const [runDate, setRunDate] = useState('')
   const [runTime, setRunTime] = useState('')
-  const [saveError, setSaveError] = useState(false)
+  const [saveState, setSaveState] = useState(null)
+
+  // resets save message
+  if (writerOpen && saveState === 'Jog logged!') {
+    setSaveState(null)
+  }
 
 // for new strava conversion
   useEffect(()=>{
@@ -98,26 +103,26 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, user, token, getRuns}) 
     }
 
     try {
-      const response = await runService.createNew({
+      const response = await runService.saveRun({
         token: token,
         runParameters
       })
       // const response = await (runInMemory && runInMemory.title)
-      // ? runService.createNew({
+      // ? runService.saveRun({
       //   token: token,
       //   runParameters
       // })
-      // : runService.createNew({
+      // : runService.saveRun({
       //   token: token,
       //   runParameters
       // })
       console.log(response)
       setWriterOpen(false)
       getRuns()
-      setSaveError(false)
+      setSaveState('Jog logged!')
     } catch (exception) {
       console.log('did not work', exception)
-      setSaveError(true)
+      setSaveState('Error saving...')
     }
 
     console.log('save run:', token, runParameters)
@@ -149,7 +154,9 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, user, token, getRuns}) 
         onChange={({target}) => setRunTime(target.value)}
       ></input>
 
-      <button className={"SaveButton" + (saveError ? " Alert" : "")} onClick={saveRun}>
+      <span className="SaveReadout">{saveState}</span>
+
+      <button className={"SaveButton" + (saveState === 'Error' ? " Alert" : "")} onClick={saveRun}>
         Save
       </button>
 

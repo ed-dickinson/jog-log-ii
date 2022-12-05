@@ -2,7 +2,7 @@ import axios from 'axios'
 const baseURL = 'http://localhost:3000'
 const urlExtension = '/run'
 
-const createNew = async params => {
+const saveRun = async params => {
 
   const config = {
     headers: {
@@ -26,6 +26,6 @@ const createNew = async params => {
 }
 
 
-const exported = { createNew }
+const exported = { saveRun }
 
 export default exported

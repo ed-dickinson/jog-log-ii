@@ -326,6 +326,27 @@ main {
   .RunTitle {
     cursor: pointer;
   }
+  .RunIcon {
+    position: relative;
+    &.LinkedToStrava {
+      img {
+        // -webkit-text-stroke: 1px #8ebf42;
+        // filter: drop-shadow(1px 1px 0px $strava-orange);
+      }
+    }
+    &.LinkedToStrava::after {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      content: '';
+      width: 4px;
+      height: 4px;
+      background-color: $strava-orange;
+      border-radius: 50%;
+
+    }
+  }
+
 }
 
 // expander for run title/descri[ption]
@@ -415,6 +436,12 @@ aside.Writer {
         outline: none;
         background-color: #e6e6e6;
       }
+    }
+    .SaveReadout {
+      font-family: monospace;
+      float: right;
+      margin-right: 1.6em;
+      padding-top: 0.2em;
     }
     .SaveButton {
       width: 40px;

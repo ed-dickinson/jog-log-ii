@@ -4,6 +4,8 @@ import dateTool from '../services/dates'
 
 const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
 
+
+
   return (
 
     <div className="Runs">
@@ -12,7 +14,7 @@ const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
         <tbody>
           {runs.map(run =>
             <tr key={run.no}>
-              <td><img src="/assets/Treasures48-runner2.png" alt="Run"/></td>
+              <td className={"RunIcon"+(run.strava_id?" LinkedToStrava":"")}><img src="/assets/Treasures48-runner2.png" alt="Run" /></td>
               <td className="RunTitle" onClick={(e)=>{e.target.classList.toggle('Expanded')}}>
                 {run.title}
                 <div className="LinkedRunImpression">{run.description}</div>
