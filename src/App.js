@@ -306,12 +306,12 @@ function App() {
         {activities.length} activities & {runs.length} runs loaded <br />
         <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
         <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
-      
+
       </main>
 
 
 
-      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} runInMemory={runInMemory} user={user} token={token}  getRuns={getRuns} />
+      <Writer writerOpen={writerOpen} setWriterOpen={setWriterOpen} runInMemory={runInMemory} setRunInMemory={setRunInMemory} user={user} token={token} getRuns={getRuns} />
 
 
       <Footer />

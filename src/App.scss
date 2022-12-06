@@ -310,6 +310,7 @@ main {
     padding-left: 0.5em;
     // border-left: 2px solid black;
     position: relative;
+    white-space: pre-wrap; // important for line wrapping
     &::before {
       content: '';
       position: absolute;
@@ -480,8 +481,8 @@ aside.Writer {
   }
   .StravaOption {
     position: absolute;
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     top: 6px;
     padding: 0;
     right: 28px;
@@ -493,6 +494,19 @@ aside.Writer {
     background-size: contain;
     &:hover {
       opacity: 0.5;
+      &::before {
+        content:'Clear Strava Activity';
+        transform: rotate(180deg);
+        position: absolute;
+        width: 10em;
+        left: 15px;
+        top: -0px;
+        opacity: 1;
+        // background-color: gold;
+        // left: -10px;
+        // right: 20px;
+
+      }
     }
   }
 }

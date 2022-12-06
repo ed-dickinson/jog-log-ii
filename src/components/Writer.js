@@ -5,7 +5,7 @@ import dateTool from '../services/dates'
 
 // THING NEEDS REFRESH UPDATING WHATEVER WHEN RUN IS ADDED/EDITED
 
-const Writer = ({writerOpen, setWriterOpen, runInMemory, user, token, getRuns}) => {
+const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, token, getRuns}) => {
 
   const [runDescription, setRunDescription] = useState('');
   const [runTitle, setRunTitle] = useState('')
@@ -164,7 +164,7 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, user, token, getRuns}) 
       <div className="Hand" >
 
       </div>
-      <button className="StravaOption" onClick={()=>console.log("this don't do anything yet!, but it should clear the run in the writer so you can add one that isn't a strava, and also maybe add a little info to tell you what to do")}></button>
+      <button className="StravaOption" onClick={()=>setRunInMemory(null)}></button>
       <button className="CloseButton" onClick={()=>setWriterOpen(false)}></button>
     </aside>
   )
