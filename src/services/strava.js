@@ -65,6 +65,16 @@ const exported = {
 
 
     return data
+  } ,
+
+  singleActivity : async params => {
+    const config = {
+      headers: {Authorization: `Bearer ${params.access_token}`}
+    }
+
+    const response = await axios.get(`https://www.strava.com/api/v3/activities/${params.id}`, config)
+
+    return response.data
   }
 }
 

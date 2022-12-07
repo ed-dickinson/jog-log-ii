@@ -20,6 +20,7 @@ import Profile from './components/Profile'
 import Settings from './components/Settings'
 import StravaAthlete from './components/StravaAthlete'
 import StravaActivities from './components/StravaActivities'
+import LatestStravaActivity from './components/LatestStravaActivity'
 import Runs from './components/Runs'
 import PermissionFailure from './components/PermissionFailure'
 
@@ -40,6 +41,7 @@ function App() {
   const [athlete, setAthlete] = useState(null)
   const [activities, setActivities] = useState([])
   const [runInMemory, setRunInMemory] = useState(null)
+  const [latestStravaActivity, setLatestStravaActivity] = useState(null)
   // const [loaded, setLoaded] = useState(false)
   // const [metric, setMetric] = useState(true)
 
@@ -166,15 +168,21 @@ function App() {
 
     if (athlete && token.valid) {
       stravaService.activities({
-        access_token : token.token,
-        activities : activities ,
-        setActivities : setActivities
+        access_token : token.token
       }).then(res => {
         console.log('fetched runs:', res)
         setActivities(res)
         // setLoaded(true)
         setRunInMemory(res[0])
+        stravaService.singleActivity({
+          access_token : token.token ,
+          id : res[0].id
+        }).then(act => {
+          console.log('single run',act)
+          setLatestStravaActivity(act)
+        })
       })
+
     }
   },[token
   ,activities, athlete
@@ -306,10 +314,14 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities & {runs.length} runs loaded <br />
+
+        {athlete && latestStravaActivity && <LatestStravaActivity latestStravaActivity={latestStravaActivity} />}
+
         <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} token={token} setActivities={setActivities}/>
+
         <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
 
-        <OldRuns setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
+
 
       </main>
 

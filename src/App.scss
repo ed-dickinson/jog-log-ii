@@ -328,7 +328,7 @@ main {
       background-image: url('../public/assets/101-loadmore-2.png');
       background-position: right;
       position: relative;
-      
+
       &:hover {
         background-position: left;
         &::before {
@@ -400,6 +400,19 @@ td {
     .LinkedRunImpression {
       display: block;
     }
+  }
+}
+
+.LatestStravaActivity {
+  border-top: 1px solid $strava-orange;
+  border-bottom: 1px solid $strava-orange;
+  .Title {
+    border-bottom: 1px solid black;
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+  }
+  .Description {
+    white-space: pre-wrap;
   }
 }
 

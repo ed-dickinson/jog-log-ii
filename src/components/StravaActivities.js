@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 
 import stravaService from '../services/strava'
+import dateTool from '../services/dates'
 
 const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, token, setActivities}) => {
 
@@ -76,6 +77,7 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, toke
                   :{borderTopWidth:'1em',borderRightWidth:1/(activity.total_elevation_gain /activity.distance * 30)+'em'}}></span>
               </td>
               <td>{(activity.total_elevation_gain).toFixed(0)}m</td>
+              <td>{dateTool.simpleDate(activity.start_date_local)}</td>
 
             </tr>
           )}
