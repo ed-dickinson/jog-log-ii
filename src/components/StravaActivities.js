@@ -1,18 +1,22 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import stravaService from '../services/strava'
 
 const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, token, setActivities}) => {
+
+  const [activitiesPage, setActivitiesPage] = useState(1)
   // activities : activities ,
   // setActivities : setActivities
   const getMoreActivities = () => {
     //pagination starts at 1
     stravaService.moreActivities({
       access_token : token.token,
-      page : 2
+      page : activitiesPage + 1
 
     }).then(res => {
       console.log('fetched runs:', res)
+      setActivitiesPage(activitiesPage + 1)
+      setActivities([...activities, ...res])
       // setActivities(res)
       // setLoaded(true)
     })

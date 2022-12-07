@@ -328,15 +328,18 @@ main {
       background-image: url('../public/assets/101-loadmore-2.png');
       background-position: right;
       position: relative;
+      
       &:hover {
         background-position: left;
         &::before {
+          opacity: 1;
           content: 'Load';
           position: absolute;
           right: 30px;
           top: -2px;
         }
         &::after {
+          opacity: 1;
           content: 'More';
           position: absolute;
           left: 30px;
