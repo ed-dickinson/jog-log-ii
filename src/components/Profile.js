@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 
 // import { UserContext } from '../App.js'
 
+import StravaAthlete from './StravaAthlete'
+
 const current_base_url = window.location.origin
 
 const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
@@ -45,7 +47,8 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
         {athlete
           ?
           <div>
-            <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID">#{athlete.id}</span>
+            <StravaAthlete athlete={athlete} />
+            <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID"><span style={{fontSize:'0em'}}>ID</span >#{athlete.id}</span>
             <div>{!token.valid && <div>Strava Token Expired<br />
               <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
                 <img src="assets/strava-reconnect3-button.png" alt="Reconnect with Strava" />

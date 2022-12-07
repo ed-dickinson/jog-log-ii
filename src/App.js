@@ -23,6 +23,8 @@ import StravaActivities from './components/StravaActivities'
 import Runs from './components/Runs'
 import PermissionFailure from './components/PermissionFailure'
 
+import OldRuns from './components/DEBUGJogLogI'
+
 // const UserContext = createContext()
 
 console.log('\\/ \\/ \\/ APP REFRESH \\/ \\/ \\/')
@@ -306,6 +308,8 @@ function App() {
         {activities.length} activities & {runs.length} runs loaded <br />
         <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
         <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
+
+        <OldRuns setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
 
       </main>
 

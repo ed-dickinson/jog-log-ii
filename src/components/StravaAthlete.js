@@ -1,18 +1,29 @@
 import React from 'react'
 // {athlete.firstname} {athlete.lastname}
+// athlete.profile / athlete.profile_medium
+// athlete.city .state .country
+// {athlete.city},<br />
+// {athlete.state},<br />
+// {athlete.country}
+// <br />
+
+import dateTool from '../services/dates'
 
 const StravaAthlete = ({athlete}) => {
   return (
     <div className="StravaAthlete">
-      from strava with athlete in tow:
-      <br />
-      {athlete.firstname} {athlete.lastname}
-      <br />
-      {athlete.city}, {athlete.state}, {athlete.country}
-      <br />
-      since: {athlete.created_at}
-      <br />
-      ID: {athlete.id} <img src={athlete.profile} alt="Athlete, provided by Strava." /> <img src={athlete.profile_medium} alt="Small Athlete, provided by Strava." />
+      <span className="AthleteDetails">
+        <strong>{athlete.firstname} {athlete.lastname}</strong>
+        <br />
+
+        c. {dateTool.simpleDateTrad(athlete.created_at)}
+        <br />
+
+        <span className="StravaID">ID: {athlete.id}</span>
+      </span>
+      <span className="StravaPhoto">
+        <img src={athlete.profile_medium} alt="Small Athlete, provided by Strava." />
+      </span>
 
     </div>
   )

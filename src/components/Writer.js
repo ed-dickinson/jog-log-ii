@@ -103,6 +103,7 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
     }
 
     try {
+      console.log(runParameters)
       const response = await runService.saveRun({
         token: token,
         runParameters
@@ -164,7 +165,11 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
       <div className="Hand" >
 
       </div>
-      <button className="StravaOption" onClick={()=>setRunInMemory(null)}></button>
+      {runInMemory && runInMemory.name &&
+        <button className="StravaOption" onClick={()=>setRunInMemory(null)}></button>
+      }
+
+
       <button className="CloseButton" onClick={()=>setWriterOpen(false)}></button>
     </aside>
   )
