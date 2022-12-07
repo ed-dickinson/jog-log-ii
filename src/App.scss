@@ -316,6 +316,37 @@ main {
 
 
   }
+  .LoadMore {
+    text-align: center;
+    button {
+      display: inline-block;
+      vertical-align: top;
+      width: 25px;
+      height: 12px;
+      border: 0;
+      background-color: transparent;
+      background-image: url('../public/assets/101-loadmore-2.png');
+      background-position: right;
+      position: relative;
+      &:hover {
+        background-position: left;
+        &::before {
+          content: 'Load';
+          position: absolute;
+          right: 30px;
+          top: -2px;
+        }
+        &::after {
+          content: 'More';
+          position: absolute;
+          left: 30px;
+          top: -2px;
+        }
+      }
+    }
+
+
+  }
 }
 
 .StravaActivities, .Runs {
@@ -330,11 +361,12 @@ main {
     &::before {
       content: '';
       position: absolute;
-      width: 2px;
+      width: 1px;
       height: calc(100% - 0.4em);
       top: 0.3em;
       left: 0;
-      background-color: black;
+      background-color: gainsboro;
+      border-left: 1px solid grey;
     }
   }
   .RunIcon {

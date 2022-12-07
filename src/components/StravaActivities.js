@@ -1,6 +1,22 @@
 import React from 'react'
 
-const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen}) => {
+import stravaService from '../services/strava'
+
+const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, token, setActivities}) => {
+  // activities : activities ,
+  // setActivities : setActivities
+  const getMoreActivities = () => {
+    //pagination starts at 1
+    stravaService.moreActivities({
+      access_token : token.token,
+      page : 2
+
+    }).then(res => {
+      console.log('fetched runs:', res)
+      // setActivities(res)
+      // setLoaded(true)
+    })
+  }
 
   activities.forEach(activity => {
     let found = runs.find(x => x.strava_id === activity.id)
@@ -61,12 +77,16 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen}) => 
           )}
         </tbody>
       </table>
+      <div className="LoadMore">
+        <button onClick={()=>{getMoreActivities()}}></button>
+      </div>
       {activities.length===0 &&
         <div className="NothingHere" style={{textAlign:'center'}}>
           <img src="/assets/shocked-guy.png"/>
           <div className="InfoText">There's nothing here!</div>
         </div>
       }
+
     </div>
   )
 }

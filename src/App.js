@@ -306,7 +306,7 @@ function App() {
           </Routes>
         </BrowserRouter>
         {activities.length} activities & {runs.length} runs loaded <br />
-        <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
+        <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} token={token} setActivities={setActivities}/>
         <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
 
         <OldRuns setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
