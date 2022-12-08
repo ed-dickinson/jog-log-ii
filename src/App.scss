@@ -404,15 +404,36 @@ td {
 }
 
 .LatestStravaActivity {
-  border-top: 1px solid $strava-orange;
-  border-bottom: 1px solid $strava-orange;
+  border: 1px solid $strava-orange;
+  border-radius: 3px;
+  padding: 1em;
+  position: relative;
   .Title {
     border-bottom: 1px solid black;
     padding-bottom: 0.5em;
     margin-bottom: 0.5em;
+    position: relative;
   }
   .Description {
     white-space: pre-wrap;
+  }
+  .StoreActivity {
+    display: inline-block;
+    // background-image: url('../public/assets/HC18-addtostack.png');
+    background-image: url('../public/assets/34-fileaway.png');
+    width: 32px;
+    height: 32px;
+
+    background-image: url('../public/assets/34-fileaway-exp.png');
+    width: 35px;
+    border: 0;
+    background-color: transparent;
+    position: absolute;
+    right: 1em;
+    bottom: -1px;
+    &:hover {
+      opacity: 0.5;
+    }
   }
 }
 

@@ -12,10 +12,12 @@ const LatestStravaActivity = ({latestStravaActivity}) => {
     <div className="LatestStravaActivity">
       <div className="Title">
         {activity.name}
+        <button className="StoreActivity"></button>
       </div>
       <div className="Description">
         {activity.description}
       </div>
+
 
 
 
