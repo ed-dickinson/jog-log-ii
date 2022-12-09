@@ -19,12 +19,10 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
 
 
   const signUp = () => {
-    console.log(signingUp)
     if (!signingUp) {
       setSigningUp(true)
     } else {
       if (username.length < 2) {
-        console.log(username.length)
         setMessage('Username too short.')
         return
       } else if (password.length < 5) {
@@ -69,7 +67,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
               <label>Password: </label>
               <input type="password" onChange={({target}) => setPassword(target.value)}></input>
             </div>
-            <div style={!signingUp ? {display: 'none'} : {display: 'block'}}>
+            <div className="LabelAndInput" style={!signingUp ? {display: 'none'} : {display: 'block'}}>
               <label>Confirm password: </label>
               <input type="password" onChange={({target}) => setPasswordConf(target.value)}></input>
             </div>

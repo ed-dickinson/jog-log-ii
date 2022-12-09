@@ -10,6 +10,7 @@ import accountService from './services/account'
 
 // import Router from './Router'
 
+// need to put auto login
 
 
 import Nav from './components/Nav'
@@ -30,10 +31,10 @@ import OldRuns from './components/DEBUGJogLogI'
 
 // const UserContext = createContext()
 
-console.log('\\/ \\/ \\/ APP REFRESH \\/ \\/ \\/')
+// console.log('\\/ \\/ \\/ APP REFRESH \\/ \\/ \\/')
 
 function App() {
-  console.log('App loaded')
+  // console.log('App loaded')
   const [user, setUser] = useState(null)
 
   const [writerOpen, setWriterOpen] = useState(false)
@@ -172,7 +173,7 @@ function App() {
       stravaService.activities({
         access_token : token.token
       }).then(res => {
-        console.log('fetched runs:', res)
+        // console.log('fetched runs:', res)
         setActivities(res)
         // setLoaded(true)
         setRunInMemory(res[0])
@@ -180,7 +181,6 @@ function App() {
           access_token : token.token ,
           id : res[0].id
         }).then(act => {
-          console.log('single run',act)
           setLatestStravaActivity(act)
         })
       })
@@ -190,13 +190,14 @@ function App() {
   ,activities, athlete
   ])
 
-  // logs user into database
+  // logs user (stravatype) into database
   useEffect(()=>{
 
     if (state.fetching_login) return
 
     // is user not logged in but athlete is
     if (athlete && !user) {
+
       setState({...state, fetching_login : true})
       accountService.linkStrava({
         id : athlete.id,
@@ -208,6 +209,7 @@ function App() {
             password : process.env.REACT_APP_STRAVA_SECRET
           })
         } else {
+          // console.log('userlogin2>3', response.data.user)
           setUser(response.data.user)
         }
         setState({...state, fetching_login : false})
@@ -262,9 +264,6 @@ function App() {
   //   }
   // },[writerOpen])
 
-  useEffect(()=>{
-    console.log(runInMemory)
-  },[runInMemory])
 
 
 
@@ -287,6 +286,7 @@ function App() {
 
       <main>
 
+
       <div className="DEBUG">
       userID: {user && user.no} — {user ? 'user connected' : 'user not connected'}<br />
       athlete: {athlete && '#' + athlete.id + ':' } {athlete ? athlete.name : 'no athlete'}
@@ -300,6 +300,7 @@ function App() {
       }}>Invalidate Token</button>
       </div>
 
+
         <BrowserRouter>
           <Routes>
             <Route path="/" element={
@@ -312,7 +313,7 @@ function App() {
                     </div>}
                     <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
                   </div>
-                  : <Intro />
+                  : <div>{state.fetching_login ? <div><p>Just fetching your details...</p><div style={{textAlign: 'center'}}><img src="/assets/People10-guyatcomp.png" alt="Person at computer."/></div></div>:<Intro />}</div>
                 }
               </div>
             } />

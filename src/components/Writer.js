@@ -31,12 +31,10 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
     let epoch
 
     if (runInMemory && runInMemory._id) { // edit run
-      console.log('run has existing id')
       setRunTitle(runInMemory.title)
       setRunDescription(runInMemory.description)
       epoch = new Date(runInMemory.date)
     } else if (runInMemory) { // strava import
-      console.log('run has no existing id, probably a fresh strava')
       setRunTitle(runInMemory.name)
       setRunDescription('')
       epoch = new Date(runInMemory.start_date_local)
@@ -47,16 +45,11 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
     }
 
 
-
-    // setRunTitle(runInMemory ? runInMemory.name : `a ${dateTool.monthName(new Date().getMonth())} run`)
-
     // let epoch = runInMemory ? new Date(runInMemory.start_date_local) : new Date()
     let date = epoch.toISOString().slice(0,10)
     let time = epoch.toISOString().slice(11,19)
     setRunDate(date)
     setRunTime(time)
-
-    // console.log('no',runInMemory.no)
 
   },[runInMemory])
 
@@ -86,6 +79,11 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
 
   const saveRun = async () => {
 
+    if (!user) {
+      setSaveState('You need to login first!')
+      return
+    }
+
     let runParameters = {
       title: runTitle,
       date: `${runDate}T${runTime}.000Z`,
@@ -103,7 +101,7 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
     }
 
     try {
-      console.log(runParameters)
+
       const response = await runService.saveRun({
         token: token,
         runParameters
@@ -117,16 +115,14 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
       //   token: token,
       //   runParameters
       // })
-      console.log(response)
+
       setWriterOpen(false)
       getRuns()
       setSaveState('Jog logged!')
     } catch (exception) {
-      console.log('did not work', exception)
       setSaveState('Error saving...')
     }
 
-    console.log('save run:', token, runParameters)
   }
 
   return (
@@ -147,7 +143,7 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
 
       <input type="date"
         value={runDate}
-        onChange={({target}) => { console.log(target.value);setRunDate(target.value)}}
+        onChange={({target}) => {setRunDate(target.value)}}
       ></input>
 
       <input type="time"
