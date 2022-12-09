@@ -249,9 +249,16 @@ function App() {
   // get runs from account
   useEffect(()=>{
     if (user) {
-      getRuns()
+      // getRuns() // fix weird dependency thing
+      accountService.getRuns({
+        no : user.no
+      }).then(response => {
+        let sorted_runs = response.runs.sort((a, b) => {return new Date(b.date) - new Date(a.date)})
+        // setRuns(response.runs)
+        setRuns(sorted_runs)
+      })
     }
-  }, [user, getRuns])
+  }, [user])
 
   useEffect(
     () => {
