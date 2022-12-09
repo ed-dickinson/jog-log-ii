@@ -2,7 +2,7 @@ import React from 'react'
 
 // {athlete.firstname} {athlete.lastname}
 
-const current_base_url = window.location.origin
+// const current_base_url = window.location.origin
 
 const Nav = ({writerOpen, setWriterOpen, profileOpen, setProfileOpen, settingsOpen, setSettingsOpen}) => {
 

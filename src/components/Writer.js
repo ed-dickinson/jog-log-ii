@@ -106,6 +106,7 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
         token: token,
         runParameters
       })
+  
       // const response = await (runInMemory && runInMemory.title)
       // ? runService.saveRun({
       //   token: token,
@@ -116,9 +117,13 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
       //   runParameters
       // })
 
-      setWriterOpen(false)
-      getRuns()
-      setSaveState('Jog logged!')
+      if (response) {
+        setWriterOpen(false)
+        getRuns()
+        setSaveState('Jog logged!')
+      }
+
+
     } catch (exception) {
       setSaveState('Error saving...')
     }

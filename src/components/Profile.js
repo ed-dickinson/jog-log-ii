@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 
 // import { UserContext } from '../App.js'
 
-import StravaAthlete from './StravaAthlete'
 
 const current_base_url = window.location.origin
 

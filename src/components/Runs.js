@@ -37,7 +37,7 @@ const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
 
       {runs.length===0 &&
         <div className="NothingHere" style={{textAlign:'center'}}>
-          <img src="/assets/shocked-guy.png"/>
+          <img src="/assets/shocked-guy.png" alt="Person looking shocked."/>
           <div className="InfoText">There's nothing here!</div>
         </div>
       }

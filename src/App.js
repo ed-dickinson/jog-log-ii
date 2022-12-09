@@ -27,7 +27,7 @@ import Runs from './components/Runs'
 import PermissionFailure from './components/PermissionFailure'
 import Approval from './components/Approval'
 
-import OldRuns from './components/DEBUGJogLogI'
+// import OldRuns from './components/DEBUGJogLogI'
 
 // const UserContext = createContext()
 
@@ -82,7 +82,7 @@ function App() {
       }
       debug += 'retrieved from localStorage'
     }
-    // console.log(debug)
+    console.log(debug)
   },[])
 
   // handles redirect
@@ -251,7 +251,7 @@ function App() {
     if (user) {
       getRuns()
     }
-  }, [user])
+  }, [user, getRuns])
 
   useEffect(
     () => {

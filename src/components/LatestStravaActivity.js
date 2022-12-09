@@ -1,6 +1,5 @@
-import React, {useState} from 'react'
+import React from 'react'
 
-import stravaService from '../services/strava'
 import dateTool from '../services/dates'
 
 const LatestStravaActivity = ({latestStravaActivity, setRunInMemory, setWriterOpen}) => {
