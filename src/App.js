@@ -14,6 +14,7 @@ import accountService from './services/account'
 
 import Nav from './components/Nav'
 import Intro from './components/Intro'
+import IntroUser from './components/IntroUser'
 import Footer from './components/Footer'
 import Writer from './components/Writer'
 import Profile from './components/Profile'
@@ -23,6 +24,7 @@ import StravaActivities from './components/StravaActivities'
 import LatestStravaActivity from './components/LatestStravaActivity'
 import Runs from './components/Runs'
 import PermissionFailure from './components/PermissionFailure'
+import Approval from './components/Approval'
 
 import OldRuns from './components/DEBUGJogLogI'
 
@@ -280,13 +282,12 @@ function App() {
 
       <Settings settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen} />
 
-      <header className="App-header">
 
-      </header>
 
 
       <main>
 
+      <div className="DEBUG">
       userID: {user && user.no} — {user ? 'user connected' : 'user not connected'}<br />
       athlete: {athlete && '#' + athlete.id + ':' } {athlete ? athlete.name : 'no athlete'}
       <br />
@@ -297,29 +298,62 @@ function App() {
         localStorage.setItem('TokenExpires', new Date(0).getTime())
         localStorage.setItem('AccessToken', 'fake')
       }}>Invalidate Token</button>
+      </div>
 
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Intro />} />
+            <Route path="/" element={
+              <div>
+                {user
+                  ? <div>
+
+                    <IntroUser />
+                    {user.connected_to_strava && <div className="StravaAside"><a href="/strava-profile">Looks like you're linked to Strava, <br />click here to see your info.</a>
+                    </div>}
+                    <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
+                  </div>
+                  : <Intro />
+                }
+              </div>
+            } />
 
             <Route path="/approval" element={<div>
-              <b>redirect –</b>
-              {state.scope_rerequest ? <PermissionFailure /> : ''}
-              {athlete !== null ? athlete.firstname : 'athlete null'}
-              {athlete !== null &&
-                <StravaAthlete athlete={athlete}/>
-              }
+
+              {state.scope_rerequest
+                ? <PermissionFailure />
+                : <div className="ApprovalContainer">
+
+                  <Approval athlete={athlete}/>
+
+                  {athlete && latestStravaActivity && <LatestStravaActivity latestStravaActivity={latestStravaActivity} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen}/>}
+
+                  <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} token={token} setActivities={setActivities}/>
+                </div>}
 
               </div>} />
+
+              <Route path="/strava-profile" element={
+                <div className="StravaProfile">
+                  <div className="StravaProfileBlurb">
+                  {athlete !== null &&
+                    <StravaAthlete athlete={athlete}/>
+                  }
+
+                  <p>Here is your latest run,<br/>
+                  and a list of your most recents:</p>
+                  </div>
+
+                  {athlete && latestStravaActivity && <LatestStravaActivity latestStravaActivity={latestStravaActivity} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen}/>}
+
+                  <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} token={token} setActivities={setActivities}/>
+                </div>
+              } />
           </Routes>
         </BrowserRouter>
+
+        <div className="DEBUG">
         {activities.length} activities & {runs.length} runs loaded <br />
-
-        {athlete && latestStravaActivity && <LatestStravaActivity latestStravaActivity={latestStravaActivity} />}
-
-        <StravaActivities activities={activities} runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} token={token} setActivities={setActivities}/>
-
-        <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
+        </div>
 
 
 

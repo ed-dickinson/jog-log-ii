@@ -12,6 +12,10 @@ $garamond: 'Garamond', Garamond, garamond;
   box-shadow: 1px 1px 2px grey;
 }
 
+.DEBUG {
+  display: none;
+}
+
 // @mixin
 
 // @font-face {
@@ -28,7 +32,7 @@ $garamond: 'Garamond', Garamond, garamond;
   padding: 1em;
   max-width: 1000px;
   margin: auto;
-  margin-top: 2em;
+  margin-top: 1em;
 }
 
 button {
@@ -94,8 +98,8 @@ nav {
       position: absolute;
       left: 5px - 12px;
       top: -10px - 16px;
-      image-rendering: crisp-edges;
-      image-rendering: pixelated;
+      // image-rendering: crisp-edges;
+      // image-rendering: pixelated;
       cursor: pointer;
       &.AppleGuy {
         filter: drop-shadow(1px 1px 2px grey);
@@ -148,7 +152,7 @@ nav {
 }
 
 .SettingsButton, .SettingsContainer {
-  // display: none;
+  display: none;
 }
 
 .SettingsContainer {
@@ -203,7 +207,8 @@ nav {
 
   position: absolute;
   right: 0;
-  padding: 1em 0.5em 0.5em;
+  padding: 1.5em 0.5em 0.5em 0.75em;
+  top: -0.5em;
   // width: 100%;
 
   transform: translateY(-100%);
@@ -255,6 +260,21 @@ nav {
       right: 0;
     }
   }
+
+  .UserForm {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    font-size: 0.8em;
+    .LabelAndInput {
+      margin-top: 0.25em;
+    }
+    button {
+      margin-left: 0.25em ;
+      margin-top: 0.25em ;
+    }
+  }
+
   .ReconnectButton {
     border-color: $strava-orange;
     border-radius: 2px;
@@ -265,10 +285,29 @@ nav {
   }
 }
 
+.Approval {
+  display: inline-block;
+}
+
+.StravaProfile {
+  padding-top: 0.5em;
+  .StravaProfileBlurb {
+    display: inline-block;
+  }
+}
+
 .StravaAthlete {
+  padding-bottom: 0.25em;
+  display: inline-block;
   img {
     filter: grayscale(1);
-    border-radius: 50%;
+    // border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    border: 1px solid black;
+    height: 52px;
+    width: 52px;
   }
   .StravaID {
     border-bottom: 2px solid $strava-orange;
@@ -277,17 +316,37 @@ nav {
   }
   .AthleteDetails {
     display: inline-block;
-    margin-right: 0.3em;
+    margin-right: 0.5em;
 
   }
   .StravaPhoto {
     display: inline-block;
     top: 0.3em;
     position: relative;
+    top: 6px;
+    background-image: url('../public/assets/Treasures92-frame-60.png');
+    height: 60px;
+    width: 60px;
+  }
+}
+
+.IntroUser {
+  display: inline-block;
+}
+.StravaAside {
+  border: 1px solid $strava-orange;
+  border-radius: 3px;
+  padding: 0.5em 0.75em;
+  display: inline-block;
+  float: right;
+  a {
+    color: black;
+    text-decoration: none;
   }
 }
 
 main {
+  // padding-top: 0em;
   margin-top: 2em;
 
   .PageTitle {
@@ -353,11 +412,13 @@ main {
 }
 
 .StravaActivities, .Runs {
-  max-width: 49%;
-  display: inline-block;
+  // max-width: 49%;
+  // display: inline-block;
   .LinkedRunImpression {
     margin-left: 0em;
-    padding-left: 0.5em;
+    padding-left: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
     // border-left: 2px solid black;
     position: relative;
     white-space: pre-wrap; // important for line wrapping
@@ -387,6 +448,9 @@ main {
   .RunTitle {
     cursor: pointer;
   }
+  table {
+    width: 100%;
+  }
 
 
 }
@@ -407,12 +471,19 @@ td {
   border: 1px solid $strava-orange;
   border-radius: 3px;
   padding: 1em;
+  padding-bottom: 0.5em;
   position: relative;
+  display: inline-block;
+  width: calc(100% - 20em);
+  float: right;
+  min-width: 20em;
+
   .Title {
     border-bottom: 1px solid black;
     padding-bottom: 0.5em;
     margin-bottom: 0.5em;
     position: relative;
+    padding-right: 60px; /* for stash icon */
   }
   .Description {
     white-space: pre-wrap;
@@ -423,17 +494,22 @@ td {
     background-image: url('../public/assets/34-fileaway.png');
     width: 32px;
     height: 32px;
+    background-position: left;
 
-    background-image: url('../public/assets/34-fileaway-exp.png');
-    width: 35px;
+    background-image: url('../public/assets/34-fileaway-exp-x2-alt.png');
+    width: 37px;
     border: 0;
     background-color: transparent;
     position: absolute;
     right: 1em;
     bottom: -1px;
     &:hover {
-      opacity: 0.5;
+      // opacity: 0.5;
+      background-position: right;
     }
+  }
+  .Date {
+    text-align: right;
   }
 }
 
@@ -610,9 +686,30 @@ footer {
   @include border;
 
   margin: 1em;
+  padding: 0.5em;
+  padding-left: 1em;
+  padding-top: 0.1em;
+  .Left, .Right {
+    width: 50%;
+    display: inline-block;
+  }
+  .Left {
 
+  }
+  .Right {
+    text-align: right;
+  }
   img {
     max-height: 1.5em;
+  }
+  img.Copyleft-symbol {
+    height: 0.75em;
+  }
+  img.React-logo {
+    height: 1.5em;
+    display: inline-block;
+    position: relative;
+    top: 0.25em;
   }
 
 }
@@ -669,8 +766,5 @@ table {
 
 // JUST FOR DEBUG
 .Intro p {
-  display: none;
-}
-.Intro::after {
-  content: ' — placeholder 1st timer text';
+  // display: none;
 }

@@ -47,8 +47,10 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
         {athlete
           ?
           <div>
-            <StravaAthlete athlete={athlete} />
-            <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID"><span style={{fontSize:'0em'}}>ID</span >#{athlete.id}</span>
+            <div style={{cursor: 'pointer'}} onClick={()=>{window.location.href=current_base_url +"/strava-profile"}}>
+              <strong>{athlete.firstname} {athlete.lastname}</strong> <span className="StravaID"><span style={{fontSize:'0em'}}>ID</span >#{athlete.id}</span>
+            </div>
+
             <div>{!token.valid && <div>Strava Token Expired<br />
               <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
                 <img src="assets/strava-reconnect3-button.png" alt="Reconnect with Strava" />
@@ -56,14 +58,14 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, token}) => {
             </div>}</div>
           </div>
           :
-          <div>
+          <div className="UserForm">
             <div>Hmm, it doesn't look like the browser recognises you.</div>
             <div>Please log in, create a profile, or connect with Strava.</div>
-            <div>
+            <div className="LabelAndInput">
               <label>Username/email: </label>
               <input onChange={({target}) => setUsername(target.value)}></input>
             </div>
-            <div>
+            <div className="LabelAndInput">
               <label>Password: </label>
               <input type="password" onChange={({target}) => setPassword(target.value)}></input>
             </div>

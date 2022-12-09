@@ -3,19 +3,27 @@ import React, {useState} from 'react'
 import stravaService from '../services/strava'
 import dateTool from '../services/dates'
 
-const LatestStravaActivity = ({latestStravaActivity}) => {
+const LatestStravaActivity = ({latestStravaActivity, setRunInMemory, setWriterOpen}) => {
 
   const activity = latestStravaActivity
+
+  // onChange={({target}) => setRunDescription(target.value)}
 
   return (
 
     <div className="LatestStravaActivity">
       <div className="Title">
         {activity.name}
-        <button className="StoreActivity"></button>
+        <button className="StoreActivity" onClick={()=>{
+          setRunInMemory(activity)
+          setWriterOpen(true)
+        }}></button>
       </div>
       <div className="Description">
-        {activity.description}
+        {activity.description ? activity.description : 'No description.'}
+      </div>
+      <div className="Date">
+        {dateTool.fullDateTrad(activity.start_date_local)}
       </div>
 
 

@@ -35,6 +35,13 @@ const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
         </tbody>
       </table>
 
+      {runs.length===0 &&
+        <div className="NothingHere" style={{textAlign:'center'}}>
+          <img src="/assets/shocked-guy.png"/>
+          <div className="InfoText">There's nothing here!</div>
+        </div>
+      }
+
     </div>
   )
 }

@@ -41,6 +41,27 @@ const simpleDateTrad = (input) => {
 
 }
 
-const exported = { monthName , simpleDate , simpleDateTrad }
+const fullDateTrad = (input) => {
+
+  let d = new Date(input)
+
+  let date_th
+  if (d.getDate() === '1' || d.getDate() === '21' || d.getDate() === '31') {
+    date_th = 'st'
+  } else if (d.getDate() === '2' || d.getDate() === '22') {
+    date_th = 'nd'
+  } else if (d.getDate() === '3' || d.getDate() === '23') {
+    date_th = 'rd'
+  } else {
+    date_th = 'th'
+  }
+
+  const output = <span>{d.getDate()}<sup>{date_th}</sup> {month_names[d.getMonth()]} '{d.getFullYear().toString().slice(2)}</span>
+
+  return output
+
+}
+
+const exported = { monthName , simpleDate , simpleDateTrad, fullDateTrad }
 
 export default exported
