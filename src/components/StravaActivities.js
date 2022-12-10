@@ -83,9 +83,11 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, toke
           )}
         </tbody>
       </table>
-      <div className="LoadMore">
-        <button onClick={()=>{getMoreActivities()}}></button>
-      </div>
+      {activities.length > 0 &&
+        <div className="LoadMore">
+          <button onClick={()=>{getMoreActivities()}}></button>
+        </div>
+      }
       {activities.length===0 &&
         <div className="NothingHere" style={{textAlign:'center'}}>
           <img src="/assets/shocked-guy.png" alt="Person looking shocked."/>

@@ -26,6 +26,7 @@ import LatestStravaActivity from './components/LatestStravaActivity'
 import Runs from './components/Runs'
 import PermissionFailure from './components/PermissionFailure'
 import Approval from './components/Approval'
+import StravaReconnectButton from './components/StravaReconnectButton'
 
 // import OldRuns from './components/DEBUGJogLogI'
 
@@ -284,7 +285,7 @@ function App() {
       />
 
       <Profile profileOpen={profileOpen} setProfileOpen={setProfileOpen}
-      athlete={athlete} user={user} token={token}/>
+      athlete={athlete} user={user} setUser={setUser} token={token}/>
 
       <Settings settingsOpen={settingsOpen} setSettingsOpen={setSettingsOpen} />
 
@@ -316,8 +317,17 @@ function App() {
                   ? <div>
 
                     <IntroUser />
-                    {user.connected_to_strava && <div className="StravaAside"><a href="/strava-profile">Looks like you're linked to Strava, <br />click here to see your info.</a>
-                    </div>}
+                    {user.connected_to_strava &&
+                      <div className="StravaAside">
+                        {token.valid
+                          ?
+                            <a href="/strava-profile">Looks like you're linked to Strava, <br />click here to see your info.</a>
+                          :
+                            <div>Looks like you're linked to Strava,<br />but your connection has expired.<br/>
+                            <StravaReconnectButton /></div>
+                        }
+                      </div>
+                    }
                     <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
                   </div>
                   : <div>{state.fetching_login ? <div><p>Just fetching your details...</p><div style={{textAlign: 'center'}}><img src="/assets/People10-guyatcomp.png" alt="Person at computer."/></div></div>:<Intro />}</div>
@@ -342,10 +352,18 @@ function App() {
 
               <Route path="/strava-profile" element={
                 <div className="StravaProfile">
+                  {!token.valid &&
+                    <div className="FloatRight">
+                    Oh no! Looks like you're Strava connection has expired.<br /> Please press this button to reconnect.<br />
+                    <StravaReconnectButton />
+                    </div>
+                  }
                   <div className="StravaProfileBlurb">
                   {athlete !== null &&
                     <StravaAthlete athlete={athlete}/>
                   }
+
+
 
                   <p>Here is your latest run,<br/>
                   and a list of your most recents:</p>

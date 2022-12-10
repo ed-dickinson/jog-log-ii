@@ -6,6 +6,10 @@ $not-strava-blue: #02b3fd;
 
 $garamond: 'Garamond', Garamond, garamond;
 
+$react-fontstack: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+
 @mixin border {
   border: 1px solid black;
   border-radius: 5px;
@@ -46,6 +50,14 @@ a:hover {
   filter: contrast(175%);
 }
 
+// COVERALLS
+
+.FloatRight {
+  float: right;
+}
+
+
+
 nav {
   @include border;
   margin: 1em;
@@ -79,19 +91,7 @@ nav {
     text-shadow: 1px 1px 2px grey;
   }
 
-  .StravaConnectButton {
-    border: 0;
-    background-color: transparent;
-    // max-height: 20px;
-    &:hover {
-      opacity: 0.8;
-    }
-    img {
-      height: 3em;
-      width: auto;
-      display: inline-block;
-    }
-  }
+
   .AppleLogo {
     img {
       height: 108px;
@@ -142,6 +142,21 @@ nav {
   }
 
 
+}
+
+
+.StravaConnectButton {
+  border: 0;
+  background-color: transparent;
+  // max-height: 20px;
+  &:hover {
+    opacity: 0.8;
+  }
+  img {
+    height: 3em;
+    width: auto;
+    display: inline-block;
+  }
 }
 
 @media only screen and (min-width: 1100px) {
@@ -270,6 +285,10 @@ nav {
     }
   }
 
+  .User {
+    font-family: $react-fontstack;
+  }
+
   .ReconnectButton {
     border-color: $strava-orange;
     border-radius: 2px;
@@ -280,6 +299,12 @@ nav {
     padding-right: 0;
     margin-right: -1px;
   }
+}
+
+.StackingGif {
+  display: inline-block;
+  top: 0.3em;
+  position: relative;
 }
 
 .Approval {
@@ -313,7 +338,7 @@ nav {
   }
   .AthleteDetails {
     display: inline-block;
-    margin-right: 0.5em;
+    margin-right: 0.75em;
 
   }
   .StravaPhoto {
@@ -336,9 +361,14 @@ nav {
   padding: 0.5em 0.75em;
   display: inline-block;
   float: right;
+  font-size: 0.8em;
   a {
     color: black;
     text-decoration: none;
+  }
+  .StravaConnectButton {
+    float: right;
+    margin-top: 0.2em;
   }
 }
 

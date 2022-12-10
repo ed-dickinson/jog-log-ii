@@ -26,6 +26,18 @@ const getRuns = async params => {
   return response.data
 }
 
-const exported = { linkStrava, linkNewStrava, getRuns }
+const userNew = async params => {
+  const response = await axios.post(baseURL + urlExtension + '/new', params)
+
+  return response.data
+}
+
+const userLogin = async params => {
+  const response = await axios.post(baseURL + urlExtension + '/login', params)
+
+  return response.data
+}
+
+const exported = { linkStrava, linkNewStrava, getRuns, userNew, userLogin }
 
 export default exported
