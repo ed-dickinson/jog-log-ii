@@ -116,11 +116,7 @@ function App() {
       if (token.valid === true) {
         return
       }
-      // if (token.valid === null) {
-      //   // DO SOMETHING HERE TO STOP NON-TRIGGERING ON non-refresh REDIRECT
-      //   console.log('token is null')
-      //   // return
-      // }
+
       if (localStorage.getItem('AccessToken') && localStorage.getItem('TokenExpires') * 1000 > new Date().getTime()) {
         return
       }
@@ -215,27 +211,13 @@ function App() {
         }
         setState({...state, fetching_login : false})
 
+      }).catch(()=>{
+        setState({...state, fetching_login : null})
       })
     }
   },[athlete,
     state, user])
 
-  // const compareRunsAndActivities = (runs, activities) => {
-  //   console.log('comping runs and acts')
-  //   let linked_runs = []
-  //   let activities_dupe = activities
-  //   activities_dupe.forEach(activity => {
-  //     let found = runs.find(x => x.strava_id === activity.id)
-  //     if (found) {
-  //       activity.linked_run = found
-  //       linked_runs.push(found)
-  //     }
-  //   })
-  //   console.log('linked',linked_runs)
-  //   console.log('activities', activities)
-  //   setActivities(activities_dupe)
-  //   // compareRunsAndActivities()
-  // }
 
   const getRuns = () => {
     accountService.getRuns({
@@ -260,11 +242,6 @@ function App() {
       })
     }
   }, [user])
-
-  useEffect(
-    () => {
-    // compareRunsAndActivities(runs, activities)
-  },[activities, runs])
 
   // useEffect(()=>{
   //   if (writerOpen && writerOpen._id) {
@@ -330,7 +307,16 @@ function App() {
                     }
                     <Runs runs={runs} setRunInMemory={setRunInMemory} setWriterOpen={setWriterOpen} />
                   </div>
-                  : <div>{state.fetching_login ? <div><p>Just fetching your details...</p><div style={{textAlign: 'center'}}><img src="/assets/People10-guyatcomp.png" alt="Person at computer."/></div></div>:<Intro />}</div>
+                  : <div>{state.fetching_login
+                    ?
+                      <div><p>Just fetching your details...</p><div style={{textAlign: 'center'}}><img src="/assets/People10-guyatcomp.png" alt="Person at computer."/></div></div>
+                    :
+                      state.fetching_login === null
+                    ?
+                      <div><p>Something's gone wrong... try reloading.</p><div style={{textAlign: 'center'}}><img src="/assets/Odds58-arrestedcomputer.png" alt="Computer being arrested."/></div></div>
+                    :
+                      <Intro />
+                  }</div>
                 }
               </div>
             } />
@@ -362,8 +348,6 @@ function App() {
                   {athlete !== null &&
                     <StravaAthlete athlete={athlete}/>
                   }
-
-
 
                   <p>Here is your latest run,<br/>
                   and a list of your most recents:</p>

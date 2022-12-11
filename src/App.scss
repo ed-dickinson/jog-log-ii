@@ -369,6 +369,8 @@ nav {
   display: inline-block;
   float: right;
   font-size: 0.8em;
+  margin-bottom: 3em;
+
   a {
     color: black;
     text-decoration: none;
@@ -376,6 +378,7 @@ nav {
   .StravaConnectButton {
     float: right;
     margin-top: 0.2em;
+    margin-bottom: -2.75em;
   }
 }
 
