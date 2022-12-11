@@ -19,7 +19,7 @@ const StravaAthlete = ({athlete}) => {
         c. {dateTool.simpleDateTrad(athlete.created_at)}
         <br />
 
-        <span className="StravaID">ID: {athlete.id}</span>
+        <span className="StravaID"><a href={"https://www.strava.com/athletes/" + athlete.id}> ID: {athlete.id}</a></span>
       </span>
       <span className="StravaPhoto">
         <img src={athlete.profile_medium} alt="Small Athlete, provided by Strava." />

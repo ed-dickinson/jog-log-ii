@@ -4,6 +4,8 @@
 $strava-orange: #fc4c02;
 $not-strava-blue: #02b3fd;
 
+$filter-orange: contrast(0%) invert(0) sepia(100%) saturate(1000%) brightness(100%) hue-rotate(-30deg);
+
 $garamond: 'Garamond', Garamond, garamond;
 
 $react-fontstack: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -243,8 +245,7 @@ nav {
 
   .StravaID {
     border-bottom: 2px solid $strava-orange;
-    // box-sizing: content-box;
-    // padding-bottom: -2px;
+
   }
 
 
@@ -333,8 +334,14 @@ nav {
   }
   .StravaID {
     border-bottom: 2px solid $strava-orange;
-    // box-sizing: content-box;
-    // padding-bottom: -2px;
+
+    a {
+      color: black;
+      text-decoration: none;
+      &:hover {
+        color: $strava-orange;
+      }
+    }
   }
   .AthleteDetails {
     display: inline-block;
@@ -461,11 +468,20 @@ main {
     }
   }
   .RunIcon {
+    &:not(.StravaRun) {
+      img {
+        filter: grayscale(1) brightness(0%) drop-shadow(0px 1px 0px darkgrey) drop-shadow(0px -1px 0px darkgrey) drop-shadow(1px 0px 0px darkgrey) drop-shadow(-1px 0px 0px darkgrey);
+      }
+    }
     &.StravaRun {
       img {
-        filter:  contrast(0%) invert(1) sepia(100%) saturate(1000%) brightness(100%) hue-rotate(-20deg);
+        // filter:  contrast(0%) invert(1) sepia(100%) saturate(1000%) brightness(100%) hue-rotate(-30deg);
+
         overflow: visible;
       }
+    }
+    img {
+      filter: drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black) drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black);
     }
   }
 }
@@ -651,7 +667,50 @@ aside.Writer {
         top: 2px;
         background-image: url('../public/assets/223-alert.png')
       }
+      &.Saving::before, &.Alert::before {
+        content: '';
+        background-image: url('../public/assets/floppy-60-double39x80.png');
+        filter: brightness(0%);
+        width: 40px;
+        height: 39px;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      &.Saving::after {
+        content: 'saving';
+        width: 32px;
+        height: 32px;
+        position: absolute;
+        left: 4px;
+        top: 2px;
+        background-image: url('../public/assets/dbl-floppy-gif.gif');
+        filter: drop-shadow(1px 0px 0px white) drop-shadow(-1px 0px 0px white) drop-shadow(0px 1px 0px white) drop-shadow(0px -1px 0px white);
+      }
     }
+    // .UpdateStravaCheck {
+    //   background-image:url('../public/assets/102-checkbutton-x2-hollow.png');
+    //   background-color: transparent;
+    //   height: 14px;
+    //   width: 16px;
+    //   border: 0;
+    //   z-index: 0;
+    //   position: absolute;
+    //   right: 42px;
+    //   bottom: 6px;
+    //   background-position: left;
+    //   &.Checked {
+    //     background-position: right;
+    //   }
+    //   &:hover::before {
+    //     content: 'Update Strava';
+    //     width: 8em;
+    //     position: absolute;
+    //     right: 10px;
+    //     top: 0;
+    //     color: $strava-orange;
+    //   }
+    // }
 
   }
 
@@ -678,7 +737,7 @@ aside.Writer {
     transform: rotate(180deg);
     border: 0;
     background-image: url('../public/assets/184-close-strava.png');
-    filter:  contrast(0%) invert(1) sepia(100%) saturate(1000%) brightness(100%) hue-rotate(-20deg);
+    filter:  contrast(0%) invert(1) sepia(100%) saturate(1000%) brightness(100%) hue-rotate(-30deg);
     background-size: contain;
     &:hover {
       opacity: 0.5;
@@ -771,6 +830,18 @@ table {
     border-top-style: solid;
     border-top-width: 100%;
     display: inline-block;
+    padding: 0 0.2em;
+  }
+  .Date {
+    text-align: right;
+    padding-left: 0.2em;
+  }
+  .LinkOut {
+    padding-left: 0.2em;
+    a:hover img {
+      position: relative;
+      left: 4px;
+    }
   }
 
 

@@ -41,7 +41,7 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, toke
         <tbody>
           {activities.map(activity =>
             <tr key={activity.id} className={activity.linked_run ? 'isLinked' : 'isNotLinked'}>
-            <td className="RunIcon StravaRun">{activity.type==='Run'?<img src="/assets/Treasures48-runner2.png" alt="Run"/>
+            <td className="RunIcon StravaRun">{activity.type==='Run'?<img src="/assets/Treasures48-runner2-orange.png" alt="Run"/>
               :activity.type==='Ride'?<img src="/assets/Treasures49-cyclist2.png" alt="Ride"/>
               :activity.type==='Swim'?<img src="/assets/Treasures53-swimmer.png" alt="Swim"/>
               :activity.type==='Hike'?'🥾'
@@ -77,7 +77,8 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, toke
                   :{borderTopWidth:'1em',borderRightWidth:1/(activity.total_elevation_gain /activity.distance * 30)+'em'}}></span>
               </td>
               <td>{(activity.total_elevation_gain).toFixed(0)}m</td>
-              <td>{dateTool.simpleDate(activity.start_date_local)}</td>
+              <td className="Date">{dateTool.simpleDate(activity.start_date_local)}</td>
+              <td className="LinkOut"><a href={"https://www.strava.com/activities/"+activity.id}><img src="assets/179-arrow-orange.png" alt="Arrow point out."/></a></td>
 
             </tr>
           )}

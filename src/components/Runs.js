@@ -14,12 +14,12 @@ const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
         <tbody>
           {runs.map(run =>
             <tr key={run.no}>
-              <td className={"RunIcon"+(run.strava_id?" StravaRun":"")}><img src="/assets/Treasures48-runner2.png" alt="Run" /></td>
+              <td className={"RunIcon"+(run.strava_id?" StravaRun":"")}><img src="/assets/Treasures48-runner2-orange.png" alt="Run" /></td>
+
               <td className={"RunTitle"+(runs.length===1?" Expanded":'')} onClick={(e)=>{e.target.classList.toggle('Expanded')}}>
                 {run.title}
                 <div className="LinkedRunImpression">{run.description}</div>
               </td>
-              <td>{dateTool.simpleDate(run.date)}</td>
               <td className="ButtonCell">
                 <button
                   className="ActivityLogButton"
@@ -28,6 +28,12 @@ const Runs = ({runs, setWriterOpen, setRunInMemory}) => {
                     setRunInMemory(run)
                     setWriterOpen(true)
                   }}>LOG</button>
+              </td>
+              <td className="Date">{dateTool.simpleDate(run.date)}</td>
+              <td className="LinkOut" style={{paddingLeft:'0.4em'}}>
+              {run.strava_id &&
+                <a href={"https://www.strava.com/activities/"+run.strava_id}><img src="assets/179-arrow-orange.png" alt="Arrow point out."/></a>
+              }
               </td>
 
             </tr>

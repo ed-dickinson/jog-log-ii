@@ -18,6 +18,8 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
     setSaveState(null)
   }
 
+
+
 // for new strava conversion
   useEffect(()=>{
     /* there are 4 types of run possible:
@@ -102,11 +104,15 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
 
     try {
 
+      setSaveState('Saving...')
+
       const response = await runService.saveRun({
         token: token,
         runParameters
       })
-  
+
+
+
       // const response = await (runInMemory && runInMemory.title)
       // ? runService.saveRun({
       //   token: token,
@@ -120,7 +126,7 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
       if (response) {
         setWriterOpen(false)
         getRuns()
-        setSaveState('Jog logged!')
+        setSaveState('Saved!')
       }
 
 
@@ -158,7 +164,11 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
 
       <span className="SaveReadout">{saveState}</span>
 
-      <button className={"SaveButton" + (saveState === 'Error' ? " Alert" : "")} onClick={saveRun}>
+
+      <button className={"SaveButton" + (
+        saveState === 'Saving...' ? " Saving" :
+        saveState === 'Error' ? " Alert" : ""
+      )} onClick={saveRun}>
         Save
       </button>
 

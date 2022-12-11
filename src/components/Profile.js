@@ -89,11 +89,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, setUser, token}) =
 
   }
 
-  const handleKeypress = e => {
-    if (e.keyCode === 13) {
 
-    }
-  }
 
   return (
     <div className="ProfileContainer">
@@ -114,7 +110,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, setUser, token}) =
             </div>}</div>
           </div>
         }
-        {!user &&
+        {!user && !athlete &&
           <div className="UserForm">
             <div>Hmm, it doesn't look like the browser recognises you.</div>
             <div>Please log in, create a profile, or connect with Strava.</div>
@@ -143,7 +139,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, setUser, token}) =
             </button>
           </div>
         }
-        {user &&
+        {user && !athlete &&
           <div className="User">"<strong>{user.email}</strong>"</div>
         }
 
