@@ -52,7 +52,7 @@ const StravaActivities = ({activities, runs, setRunInMemory, setWriterOpen, toke
               :activity.type==='Row'?'🚣'
               :activity.type==='Walk'?<img src="/assets/Treasures49-walker.png" alt="Walk"/>
               :'🕴️'}</td>
-              <td>{activity.linked_run ? '*' : ' '}</td>
+              
               <td className="ActivityName" onClick={(e)=>{e.target.classList.toggle('Expanded')}}>
                 {activity.name}
                 {activity.linked_run && <div className="LinkedRunImpression">{activity.linked_run.description}</div>}

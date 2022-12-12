@@ -115,7 +115,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, setUser, token}) =
             <div>Hmm, it doesn't look like the browser recognises you.</div>
             <div>Please log in, create a profile, or connect with Strava.</div>
             <div className="LabelAndInput">
-              <label>Username/email: </label>
+              <label>Username: </label>
               <input onChange={({target}) => setUsername(target.value)}></input>
             </div>
             <div className="LabelAndInput">
@@ -134,7 +134,7 @@ const Profile = ({profileOpen, setProfileOpen, athlete, user, setUser, token}) =
             </div>
             <span>{working?<img className="StackingGif" src="../assets/tinystacker.gif" alt="Stacking papers."/>:message} </span>
             <button onClick={()=>{logIn()}}>Log in</button><button onClick={()=>{signUp()}}>Sign Up</button><br />
-            <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all"}}>
+            <button className="StravaConnectButton" onClick={()=>{window.location.href = "http://www.strava.com/oauth/authorize?client_id=70098&response_type=code&redirect_uri="+current_base_url+"/approval&approval_prompt=auto&scope=read_all,activity:read_all,activity:write"}}>
               <img src="assets/strava-connect-button.png" alt="Connect with Strava" />
             </button>
           </div>

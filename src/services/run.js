@@ -21,7 +21,19 @@ const saveRun = async params => {
   return response.data
 }
 
+const listAll = async params => {
+  const config = {
+    headers: {
+      // Authorization: `Bearer ${params.token}`
+    }
+  }
 
-const exported = { saveRun }
+  const response = await axios.get(baseURL + urlExtension + '/all', config)
+
+  return response.data
+}
+
+
+const exported = { saveRun, listAll }
 
 export default exported

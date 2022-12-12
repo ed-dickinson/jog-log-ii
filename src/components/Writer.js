@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 
 import runService from '../services/run'
+import stravaService from '../services/strava'
 import dateTool from '../services/dates'
 
 // THING NEEDS REFRESH UPDATING WHATEVER WHEN RUN IS ADDED/EDITED
@@ -12,6 +13,9 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
   const [runDate, setRunDate] = useState('')
   const [runTime, setRunTime] = useState('')
   const [saveState, setSaveState] = useState(null)
+  const [updateStrava, setUpdateStrava] = useState(false)
+
+  const [hasStravaLink, setHasStravaLink] = useState(null)
 
   // resets save message
   if (writerOpen && saveState === 'Jog logged!') {
@@ -134,7 +138,29 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
       setSaveState('Error saving...')
     }
 
+    if (updateStrava) {
+      try {
+        const id = runInMemory.id ? runInMemory.id : runInMemory.strava_id
+        console.log(id)
+        stravaService.editActivity({
+          access_token : token.token,
+          id : id,
+          description : runDescription,
+          name : runTitle
+        }).then(res=>{console.log(res)})
+      } catch (exception) {
+        console.log('error updating strava')
+      }
+    }
+
   }
+
+  useEffect(()=>{
+    if (!runInMemory) {return}
+    setHasStravaLink(runInMemory.id || runInMemory.strava_id ? true : false)
+  },[runInMemory])
+
+  console.log(runInMemory)
 
   return (
     <aside className={"Writer" + (writerOpen ? ' show' : ' hide')}>
@@ -162,7 +188,16 @@ const Writer = ({writerOpen, setWriterOpen, runInMemory, setRunInMemory, user, t
         onChange={({target}) => setRunTime(target.value)}
       ></input>
 
-      <span className="SaveReadout">{saveState}</span>
+      <span className={"SaveReadout"+(hasStravaLink?" HasStravaLink":"")}>{saveState}</span>
+
+      {runInMemory && (runInMemory.strava_id || runInMemory.name) &&
+        <button className={"UpdateStravaCheck" + (updateStrava ? " Checked" : "")}
+          onClick={()=>{setUpdateStrava(!updateStrava)}}
+          onMouseEnter={()=>{setSaveState(<span className="Orange">Update Strava</span>)}}
+          onMouseLeave={()=>{setSaveState(null)}}
+          >
+        </button>
+      }
 
 
       <button className={"SaveButton" + (

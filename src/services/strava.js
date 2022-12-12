@@ -75,6 +75,21 @@ const exported = {
     const response = await axios.get(`https://www.strava.com/api/v3/activities/${params.id}`, config)
 
     return response.data
+  } ,
+
+  editActivity : async params => {
+    const config = {
+      headers: {Authorization: `Bearer ${params.access_token}`}
+    }
+
+    const body = {
+      description : params.description,
+      name : params.name
+    }
+
+    const response = await axios.put(`https://www.strava.com/api/v3/activities/${params.id}`, body, config)
+
+    return response.data
   }
 }
 

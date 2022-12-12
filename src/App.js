@@ -16,6 +16,7 @@ import accountService from './services/account'
 import Nav from './components/Nav'
 import Intro from './components/Intro'
 import IntroUser from './components/IntroUser'
+import PublicRuns from './components/PublicRuns'
 import Footer from './components/Footer'
 import Writer from './components/Writer'
 import Profile from './components/Profile'
@@ -51,6 +52,7 @@ function App() {
 
   // const [scope, setScope] = useState(null)
   // const [tempToken, setTempToken] = useState(null)
+  const [permissions, setPermissions] = useState(null)
 
   const [runs, setRuns] = useState([])
 
@@ -98,10 +100,15 @@ function App() {
 
     const urlParams = new URLSearchParams(queryString);
 
-    if (urlParams.get('scope') === 'read,activity:read_all,read_all') {
+    // if (urlParams.get('scope') === 'read,activity:read_all,read_all'
+    //  || urlParams.get('scope') === 'read,activity:read_all,read_all,activity:write') {
+    if (urlParams.get('scope').includes('activity:read_all')) {
       // if redirect with approval from Strava
       // then login to mongodb
       // a;so do this if athlete is found in storage
+
+      setPermissions(urlParams.get('scope').includes('activity:write') ? 'write' : 'read')
+
 
       // only do exchange if token needs refreshing
       // although this would be handy to change to recognising only doing it on the first redirect not on app changes
@@ -140,7 +147,6 @@ function App() {
       // setTempToken(urlParams.get('code'))
     } else {
       // this leaves redirect page with no
-
       setState({...state, scope_rerequest : true})
       return
     }
@@ -251,7 +257,6 @@ function App() {
 
 
 
-
 // <Route path="/profile" element={<Profile />} />
 
   return (
@@ -275,6 +280,8 @@ function App() {
       <div className="DEBUG">
       userID: {user && user.no} — {user ? 'user connected' : 'user not connected'}<br />
       athlete: {athlete && '#' + athlete.id + ':' } {athlete ? athlete.name : 'no athlete'}
+      <br />
+      permissions: {permissions === null ? 'null' : permissions}
       <br />
       time: {new Date().toLocaleString()} —
       token valid? <strong>{token.valid === 'null' ? 'null' : token.valid ? 'true' : 'false'}</strong>, {token.valid ? 'expires' : 'expired'}: {new Date(localStorage.getItem('TokenExpires')*1000).toLocaleString()}
@@ -309,13 +316,17 @@ function App() {
                   </div>
                   : <div>{state.fetching_login
                     ?
-                      <div><p>Just fetching your details...</p><div style={{textAlign: 'center'}}><img src="/assets/People10-guyatcomp.png" alt="Person at computer."/></div></div>
+                      <div><p>Just fetching your details...</p><div style={{textAlign: 'center'}}><span className="ComputerGuy"><img src="/assets/People10-guyatcomp.png" alt="Person at computer."/></span></div></div>
                     :
                       state.fetching_login === null
                     ?
                       <div><p>Something's gone wrong... try reloading.</p><div style={{textAlign: 'center'}}><img src="/assets/Odds58-arrestedcomputer.png" alt="Computer being arrested."/></div></div>
                     :
-                      <Intro />
+                      <div>
+                        <Intro />
+                        <p style={{marginBottom: '1.5em'}}><span className="DoubleUnderline" >Here is a selection of recent run impressions:</span></p>
+                        <PublicRuns />
+                      </div>
                   }</div>
                 }
               </div>
